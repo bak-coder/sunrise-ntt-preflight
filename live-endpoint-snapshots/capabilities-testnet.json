@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "endpoint": "GET https://executor-testnet.labsapis.com/v0/capabilities",
+    "environment": "testnet",
+    "captured_at": "2026-01-15T10:32:00Z",
+    "WARNING": "Live response — schema and supported chains may change. Re-fetch before submission.",
+    "how_to_refresh": "curl https://executor-testnet.labsapis.com/v0/capabilities | jq . > live-endpoint-snapshots/capabilities-testnet.json",
+    "source": "Wormhole Executor Testnet — confirmed schema from wormhole.com/docs/protocol/infrastructure-guides/ntt-executor/"
+  },
+
+  "_schema_note": "Response is keyed by Wormhole chain ID (as string). Per-chain object contains requestPrefixes (supported relay types FOR THAT CHAIN AS DESTINATION), gasDropOffLimit, maxGasLimit, maxMsgValue.",
+
+  "1": {
+    "_chain": "Solana (Solana devnet on testnet)",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "10000000",
+    "maxGasLimit": "1400000",
+    "maxMsgValue": "100000000"
+  },
+  "2": {
+    "_chain": "Ethereum (Sepolia on testnet)",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+  "23": {
+    "_chain": "Arbitrum (Arbitrum Sepolia on testnet)",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+  "30": {
+    "_chain": "Base (Base Sepolia on testnet)",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+
+  "_chain_ids_tested": [1, 2, 23, 30],
+  "_ERN1_confirmed_as_destination": [1, 2, 23, 30]
+}

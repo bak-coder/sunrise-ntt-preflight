@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "executor-status-tx",
+  "title": "Executor POST /v0/status/tx Response",
+  "type": "object",
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["completed", "pending", "failed"],
+      "description": "Execution status of the submitted transaction"
+    },
+    "executionTxHash": {
+      "type": "string",
+      "description": "Transaction hash of the execution on destination chain (present when status=completed)"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp when execution completed"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if status=failed"
+    }
+  }
+}

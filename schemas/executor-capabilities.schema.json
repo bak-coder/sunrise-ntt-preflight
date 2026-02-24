@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "executor-capabilities",
+  "title": "Executor /v0/capabilities Response",
+  "description": "Chain-keyed capabilities response from Wormhole Executor API. Keys are Wormhole chain IDs as strings.",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/definitions/ChainCapabilities"
+  },
+  "definitions": {
+    "ChainCapabilities": {
+      "type": "object",
+      "description": "Capabilities for a specific chain as destination",
+      "required": ["requestPrefixes", "gasDropOffLimit", "maxGasLimit", "maxMsgValue"],
+      "properties": {
+        "requestPrefixes": {
+          "type": "array",
+          "description": "Relay types supported for this chain as destination. Check for 'ERN1' for NTT with Executor.",
+          "items": {
+            "type": "string",
+            "enum": ["ERN1", "ERC1", "ERC2", "ERB1", "wormhole"]
+          },
+          "minItems": 1,
+          "example": ["ERN1"]
+        },
+        "gasDropOffLimit": {
+          "type": "string",
+          "description": "Maximum native token (in base units) the relayer will drop off on destination chain",
+          "pattern": "^[0-9]+$",
+          "example": "10000000"
+        },
+        "maxGasLimit": {
+          "type": "string",
+          "description": "Maximum gas limit accepted for the redeem transaction",
+          "pattern": "^[0-9]+$",
+          "example": "1400000"
+        },
+        "maxMsgValue": {
+          "type": "string",
+          "description": "Maximum msgValue (native token) the relayer will accept",
+          "pattern": "^[0-9]+$",
+          "example": "100000000"
+        }
+      }
+    }
+  },
+  "_usage_note": "Validate with: ajv validate -s schemas/executor-capabilities.schema.json -d live-endpoint-snapshots/capabilities-testnet.json",
+  "_check_logic": {
+    "description": "For executor-relay-capabilities check",
+    "code": [
+      "const src = caps[String(srcChainId)];",
+      "const dst = caps[String(dstChainId)];",
+      "const ok = !!src && !!dst && Array.isArray(dst.requestPrefixes) && dst.requestPrefixes.includes('ERN1');"
+    ]
+  }
+}

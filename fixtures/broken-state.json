@@ -1,0 +1,155 @@
+{
+  "_comment": "Snapshot of broken devnet NTT state for --mock-chain demo mode",
+  "_description": "Represents a Sunrise NTT deployment with all 3 documented failure patterns active",
+  "_source": "devnet snapshot, anonymized",
+  "_origin": "Constructed from docs/CHECKS_REFERENCE.md failure patterns: PeerNotRegistered + InvalidPeerDecimals + NoEnabledTransceivers + low gasLimit",
+  "_scenario": "Post-deploy before add-peer / add-transceiver / gasLimit fix — exactly what demo-setup.sh creates",
+  "_last_verified": "2026-01-15",
+  "config": {
+    "network": "Devnet",
+    "executorEndpoint": "https://executor-testnet.labsapis.com",
+    "executorVersion": "v1.5.0",
+    "gasLimit": 200000,
+    "profile": "sunrise-executor"
+  },
+
+  "nttJson": {
+    "network": "Devnet",
+    "chains": {
+      "Solana": {
+        "chainId": 1,
+        "token": "So11111111111111111111111111111111111111112",
+        "manager": "NTTMgr11111111111111111111111111111111111111",
+        "transceivers": {
+          "wormhole": "WHTr11111111111111111111111111111111111111"
+        }
+      },
+      "Base": {
+        "chainId": 30,
+        "token": "0xDeadBeef11111111111111111111111111111111",
+        "manager": "0xNttMgr1111111111111111111111111111111111",
+        "transceivers": {
+          "wormhole": "0xWHTr111111111111111111111111111111111111"
+        },
+        "peerDecimals": 18,
+        "_note": "BUG: ntt.json says 18, but on-chain registration is 6"
+      }
+    }
+  },
+
+  "onChain": {
+    "solana": {
+      "nttManagerPeer_Base": null,
+      "_note_peer": "MISSING — NttManagerPeer account for Base does not exist on Solana side",
+      "_error": "PeerNotRegistered — forward Solana→Base transfers will fail",
+
+      "config": {
+        "mode": "burning",
+        "mint": "So11111111111111111111111111111111111111112",
+        "mintAuthority": "NTTMgr11111111111111111111111111111111111111",
+        "_mintAuthorityOk": true
+      },
+
+      "transceivers": [
+        {
+          "address": "0xDEAD111111111111111111111111111111111111",
+          "enabled": true,
+          "type": "ERN0",
+          "_note": "BUG: ERN0 not ERN1. Sunrise Executor requires ERN1 relay type"
+        }
+      ],
+      "_executor_ERN1_registered": false,
+      "_error_transceiver": "NoEnabledTransceivers — ERN1 not found in transceiver registry",
+
+      "outboundRateLimit": {
+        "limit": "1000000000",
+        "capacityAtLastTx": "1000000000",
+        "lastTxTimestamp": 1736000000
+      },
+
+      "inboundRateLimit_Base": {
+        "limit": "1000000000",
+        "capacityAtLastTx": "1000000000",
+        "lastTxTimestamp": 1736000000
+      }
+    },
+
+    "evm_Base": {
+      "getPeer_chainId1": {
+        "peerAddress": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "tokenDecimals": 0,
+        "_note": "BUG: bytes32(0) means NOT REGISTERED. Reverse transfers Base→Solana will fail."
+      },
+      "_error": "PeerNotRegistered — reverse transfers Base→Solana will fail",
+
+      "nttManagerPeer_Solana_declared_decimals_in_registration": 6,
+      "_declared_decimals_note": "The SOLANA side has a (now removed) peer entry that had decimals=6, but ntt.json says 18"
+    }
+  },
+
+  "executorApi": {
+    "capabilities": {
+      "_schema": "chain-keyed by Wormhole chain ID as string",
+      "1":  { "requestPrefixes": ["ERN1"], "gasDropOffLimit": "10000000", "maxGasLimit": "1400000", "maxMsgValue": "100000000" },
+      "2":  { "requestPrefixes": ["ERN1"], "gasDropOffLimit": "5000000000000000", "maxGasLimit": "1000000", "maxMsgValue": "1000000000000000" },
+      "23": { "requestPrefixes": ["ERN1"], "gasDropOffLimit": "5000000000000000", "maxGasLimit": "1000000", "maxMsgValue": "1000000000000000" },
+      "30": { "requestPrefixes": ["ERN1"], "gasDropOffLimit": "5000000000000000", "maxGasLimit": "1000000", "maxMsgValue": "1000000000000000" }
+    },
+    "_capabilities_ok": true,
+    "_note": "Executor API is fine — the problem is on-chain registration, not Executor config"
+  },
+
+  "expectedCheckResults": {
+    "peer-registration": "FAIL",
+    "decimals-sync": "FAIL",
+    "mint-authority-policy": "PASS",
+    "rate-limit-sanity": "PASS",
+    "ata-rent-readiness": "PASS",
+    "executor-transceiver-registration": "FAIL",
+    "executor-relay-capabilities": "PASS",
+    "executor-endpoint-reachability": "PASS",
+    "executor-quote-sanity": "PASS",
+    "compute-budget-sanity": "WARN"
+  },
+
+  "expectedTxPlan": [
+    {
+      "step": 1,
+      "severity": "BLOCKING",
+      "title": "Register reverse peer Base→Solana",
+      "command": "ntt add-peer --chain base --address <solana_ntt_manager> --token-decimals 6",
+      "requiresOwnerSignature": true,
+      "chain": "Base"
+    },
+    {
+      "step": 2,
+      "severity": "BLOCKING",
+      "title": "Fix decimal mismatch — re-register Base peer",
+      "note": "On-chain: decimals=6, ntt.json declares: decimals=18. Confirm actual token decimals before choosing resolution.",
+      "command": "ntt add-peer --chain base --address <base_ntt_manager> --token-decimals 6",
+      "requiresOwnerSignature": true,
+      "chain": "Solana"
+    },
+    {
+      "step": 3,
+      "severity": "BLOCKING",
+      "title": "Register Sunrise Executor as ERN1 transceiver",
+      "command": "ntt add-transceiver --address <sunrise_executor_address> --relay-type ERN1",
+      "requiresOwnerSignature": true,
+      "chain": "Solana"
+    },
+    {
+      "step": 4,
+      "severity": "WARNING",
+      "title": "Increase gasLimit to 225000",
+      "command": "Update ntt.json: gasLimit → 225000",
+      "requiresOwnerSignature": false
+    },
+    {
+      "step": 5,
+      "severity": "INFO",
+      "title": "Full re-verify",
+      "command": "ntt-preflight verify --profile sunrise-executor --config ./ntt.json"
+    }
+  ]
+}

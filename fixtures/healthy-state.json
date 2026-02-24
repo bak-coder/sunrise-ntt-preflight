@@ -1,0 +1,70 @@
+{
+  "_comment": "Snapshot of healthy/fixed devnet NTT state — all checks PASS",
+  "_description": "Used for the re-verify step of the demo flow (after applying tx-plan)",
+  "_origin": "Derived from broken-state.json after applying all tx-plan remediation steps",
+  "_scenario": "All 10 checks PASS: peers registered, decimals synced, ERN1 enabled, gasLimit=225_000",
+  "_last_verified": "2026-01-15",
+
+  "config": {
+    "network": "Devnet",
+    "executorEndpoint": "https://executor-testnet.labsapis.com",
+    "executorVersion": "v1.5.0",
+    "gasLimit": 225000,
+    "profile": "sunrise-executor"
+  },
+
+  "onChain": {
+    "solana": {
+      "nttManagerPeer_Base": {
+        "address": "0xNttMgr1111111111111111111111111111111111",
+        "tokenDecimals": 6,
+        "inboundLimit": "1000000000"
+      },
+
+      "config": {
+        "mode": "burning",
+        "mint": "So11111111111111111111111111111111111111112",
+        "mintAuthority": "NTTMgr11111111111111111111111111111111111111"
+      },
+
+      "transceivers": [
+        {
+          "address": "SunriseExec11111111111111111111111111111111",
+          "enabled": true,
+          "type": "ERN1"
+        }
+      ],
+
+      "outboundRateLimit": { "limit": "1000000000" },
+      "inboundRateLimit_Base": { "limit": "1000000000" }
+    },
+
+    "evm_Base": {
+      "getPeer_chainId1": {
+        "peerAddress": "0x0000000000000000NTTMgr111111111111111111111111111111",
+        "tokenDecimals": 6
+      }
+    }
+  },
+
+  "executorApi": {
+    "capabilities": {
+      "supported_chains": [1, 2, 23, 30],
+      "supported_relay_types": ["ERN1"],
+      "status": "active"
+    }
+  },
+
+  "expectedCheckResults": {
+    "peer-registration": "PASS",
+    "decimals-sync": "PASS",
+    "mint-authority-policy": "PASS",
+    "rate-limit-sanity": "PASS",
+    "ata-rent-readiness": "PASS",
+    "executor-transceiver-registration": "PASS",
+    "executor-relay-capabilities": "PASS",
+    "executor-endpoint-reachability": "PASS",
+    "executor-quote-sanity": "PASS",
+    "compute-budget-sanity": "PASS"
+  }
+}

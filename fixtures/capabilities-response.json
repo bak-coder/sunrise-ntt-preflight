@@ -1,0 +1,48 @@
+{
+  "_comment": "Real /v0/capabilities response format — chain-keyed by Wormhole chain ID",
+  "_source": "wormhole.com/docs/protocol/infrastructure-guides/ntt-executor/ (official guide)",
+  "_endpoint_dev": "GET https://executor-testnet.labsapis.com/v0/capabilities",
+  "_endpoint_prod": "GET https://executor.labsapis.com/v0/capabilities",
+  "_WARNING": "Schema is live — may change. Validate against LIVE_ENDPOINT_SNAPSHOTS/ before release.",
+
+  "1": {
+    "_chain": "Solana",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "10000000",
+    "maxGasLimit": "1400000",
+    "maxMsgValue": "100000000"
+  },
+  "2": {
+    "_chain": "Ethereum",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+  "23": {
+    "_chain": "Arbitrum",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+  "30": {
+    "_chain": "Base",
+    "requestPrefixes": ["ERN1"],
+    "gasDropOffLimit": "5000000000000000",
+    "maxGasLimit": "1000000",
+    "maxMsgValue": "1000000000000000"
+  },
+
+  "_field_descriptions": {
+    "requestPrefixes": "Relay types supported for this chain as DESTINATION (e.g. ['ERN1'])",
+    "gasDropOffLimit": "Max native token the relayer will drop off (in destination native units)",
+    "maxGasLimit": "Maximum gas limit accepted for the redeem transaction",
+    "maxMsgValue": "Maximum msgValue the relayer will accept"
+  },
+
+  "_check_pattern": {
+    "code": "const ok = !!caps[String(srcChainId)] && !!caps[String(dstChainId)] && Array.isArray(caps[String(dstChainId)].requestPrefixes) && caps[String(dstChainId)].requestPrefixes.includes('ERN1')",
+    "note": "Check dstChainId entry because ERN1 is checked on the DESTINATION side"
+  }
+}
