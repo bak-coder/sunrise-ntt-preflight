@@ -1,14 +1,19 @@
 # Active Context
-_Обновлено: —_
+_Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Инициализация проекта
+Заполнение memory bank из финального спека v6. Проект определён полностью — архитектура, checks, профили, demo flow, скоуп. Готов к старту разработки.
 
 ## Следующий шаг
-Заполнить projectBrief.md и начать первую задачу
+Bootstrap Gate пройден — все 4 ключевых файла заполнены. Следующее действие: декомпозиция скоупа на задачи и запуск первого субагента. Рекомендуемая точка входа — scaffolding CLI (entry point, профили, базовая структура check engine).
 
 ## Открытые вопросы
-—
+- Конкретный Node.js / TypeScript стек не зафиксирован явно — нужно подтверждение перед scaffolding
+- Имя npm пакета / бинаря не определено (предположение: `ntt-preflight`)
+- Где будет лежать Sunrise Executor endpoint URL — в `ntt.json` или hardcoded / env variable
 
 ## Последние решения
-—
+- v6 финализирован как source of truth для всего memory bank
+- `compute-budget-sanity [static]` — в Core, `--deep` simulation — в Stretch
+- Dual demo mode: devnet primary + `--mock-chain` fallback
+- `fail-on: blocking` — warnings не блокируют PR в GitHub Action
