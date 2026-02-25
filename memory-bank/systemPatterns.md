@@ -251,3 +251,11 @@ Phase 4 / Iteration 4.2
 Added CHK-010 executor-relay-capabilities using existing executor HTTP adapter transport from 4.1.
 Minimal validation policy only: HTTP 2xx, parseable JSON, required top-level fields/types (supported_chains:string[], supported_relay_types:string[], status:string).
 Transport/config failures remain degradation-path SKIPPED; payload/status invalid maps to FAIL.
+
+Phase 4 / Iteration 4.3
+Added CHK-011 executor-transceiver-config-presence as config/mock-only consistency check.
+Scope is strictly config presence/shape:
+executor section
+required executor transceiver reference
+executor.transceivers non-empty list containing that reference
+Explicitly not on-chain transceiver registration validation.
