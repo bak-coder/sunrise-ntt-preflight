@@ -230,3 +230,7 @@ ntt-preflight CLI
   - plan: содержит fix шаги для CHK-007/008
   - fixed: CHK-007/008 PASS и `ci_should_fail=false`
 - Артефакты фиксированы по путям в `artifacts/demo-mock-flow/*`.
+
+### Phase 3 / real-transition
+- Solana adapter now supports existence-only peer account read via derived peer PDA (`["peer", uint16_le(chain_id)]` + manager program id), with normalized `exists` result and degradation-safe failure mapping.
+- Explicitly no decimals/account deserialization yet.

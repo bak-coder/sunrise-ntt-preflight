@@ -1,15 +1,17 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
+# Active Context
+_Обновлено: 2026-02-25_
+
 ## Текущий фокус
-Phase 3 / Iteration 3.4 завершена: добавлен repeatable mock demo-flow script (broken -> verify -> plan -> fixed -> re-verify -> READY).
+Phase 3 / Iteration 3.5.1 completed — real-path Solana adapter peer existence capability added (preparatory step for CHK-007 real routing).
 
 ## Следующий шаг
-Подготовить следующий шаг mock-first/real-transition без изменения runtime semantics/guards и без tx execution.
+Phase 3 / Iteration 3.5.2 — wire CHK-007 source routing (mock vs rpc) using this adapter, still existence-only first.
 
 ## Открытые вопросы
-- Когда выводить demo script в README quickstart (отдельный короткий блок)?
-- Нужно ли параметризовать script fixture paths для разных demo-сценариев?
+- Confirm final seed convention source (`peer` vs `ntt_manager_peer`) against authoritative IDL before production hardening.
 
 ## Последние решения
 - Demo orchestration остаётся mock-only и read-only.
