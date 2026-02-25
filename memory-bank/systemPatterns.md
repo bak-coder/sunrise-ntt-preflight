@@ -283,3 +283,5 @@ Policy: retrieval degradation -> SKIPPED; parse/shape invalid payload -> FAIL; m
 Scope intentionally shallow: top-level from_chain/to_chain/amount_out string checks only; no real quote HTTP integration in this iteration.
 
 Phase 5 / Iteration 5.2.2: CHK-012 extended from mock-first to mock+real dry-run quote retrieval using existing executor HTTP transport pattern; payload sanity logic unchanged (PASS/FAIL/SKIPPED semantics preserved).
+
+Phase 5 / Iteration 5.2.3: Added FAIL-driven tx-plan mapping for CHK-012 executor-quote-sanity; PASS/SKIPPED remain non-actionable; mapping includes reason_code + evidence summary in executor-style step text.

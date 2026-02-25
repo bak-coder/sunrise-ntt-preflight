@@ -29,6 +29,7 @@
 [2026-02-25] Phase 5 / Iteration 5.1.1: validated CHK-008 Solana peer account decimals layout against authoritative upstream source; corrected parsing offset to 41; preserved runtime contracts and degradation behavior.
 [2026-02-25] Phase 5 / Iteration 5.2.1: implemented CHK-012 executor-quote-sanity (mock-first), added PASS/FAIL fixtures, wired after CHK-010 in sunrise-executor, validated PASS/FAIL/SKIPPED smoke paths with existing verify/report pipeline.
 [2026-02-25] Phase 5 / Iteration 5.2.2: implemented real dry-run quote retrieval routing for CHK-012; validated mock PASS + real PASS/FAIL/SKIPPED through verify/report pipeline without runtime contract changes.
+[2026-02-25] Phase 5 / Iteration 5.2.3: implemented CHK-012 FAIL-driven plan mapping in tx-plan; validated FAIL generates action, PASS/SKIPPED do not; existing executor/domain mappings remain stable.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

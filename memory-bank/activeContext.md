@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CHK-012 supports mock + real dry-run retrieval with shared sanity validation path.
-Следующий шаг: optional plan mapping for CHK-012 FAIL (separate iteration).
+Текущий фокус: CHK-012 plan mapping integrated (FAIL-only) with existing tx-plan pipeline.
+Следующий шаг: optional demo flow update to surface CHK-012 remediation step in narrative.
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения
