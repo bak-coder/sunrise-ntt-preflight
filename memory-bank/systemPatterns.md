@@ -269,3 +269,9 @@ Phase 4 / Iteration 4.5:
 Demo orchestration expanded to include executor-layer failures (CHK-010, CHK-011) in mock narrative.
 Plan artifact now demonstrates executor remediation steps together with peer/decimals actions in one deterministic flow.
 No changes to check semantics/contracts; demo-only orchestration polish.
+
+Phase 5 / Iteration 5.1
+CHK-008 rpc mode enabled with Solana peer account decimals parsing from getAccountInfo account data.
+Minimal parse assumption used: tokenDecimals at offset 40 (8-byte discriminator + 32-byte peer address).
+Parse uncertainty/read issues map to degradation SKIPPED via adapter (PEER_ACCOUNT_DECIMALS_UNPARSEABLE) to avoid false PASS.
+Mock-mode CHK-008 path unchanged.
