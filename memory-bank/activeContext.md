@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CHK-013 static compute-budget sanity integrated into sunrise-executor verify flow.
-Следующий шаг: optional FAIL-driven plan mapping for CHK-013 (separate iteration).
+Текущий фокус: demo narrative now explicitly covers CHK-012 remediation and CHK-013 verify-only threshold evidence.
+Следующий шаг: optional dedicated plan mapping iteration for CHK-013 (if desired).
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения

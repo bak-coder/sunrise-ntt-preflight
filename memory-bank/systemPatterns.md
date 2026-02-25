@@ -288,3 +288,5 @@ Phase 5 / Iteration 5.2.3: Added FAIL-driven tx-plan mapping for CHK-012 executo
 
 Phase 5 / Iteration 5.3.1: Added CHK-013 compute-budget-sanity as static deterministic config check (no RPC/simulation), with base minimum constant 187430 and threshold ceil(base*1.2)=224916.
 Semantics: FAIL only when parseable gasLimit is below threshold; source/field uncertainty maps to SKIPPED degradation.
+
+Phase 6 / Iteration 6.1.1: demo mock flow updated to explicitly surface CHK-012 FAIL -> plan remediation step and CHK-013 FAIL as verify-only signal; fixed state now asserts CHK-012/013 PASS without changing check/plan semantics.
