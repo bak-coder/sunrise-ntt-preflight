@@ -1,0 +1,6 @@
+{
+  "network": "devnet",
+  "manager": {
+    "solanaProgramId": "invalid_program_id"
+  }
+}
