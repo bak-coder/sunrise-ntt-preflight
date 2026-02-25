@@ -44,7 +44,43 @@ export interface EvmReadAdapter {
   }>;
 }
 
+export type SolanaRpcReadFailureReasonCode =
+  | "RPC_UNAVAILABLE"
+  | "RPC_TIMEOUT"
+  | "RPC_READ_ERROR"
+  | "RPC_RESPONSE_INVALID";
+
+export interface SolanaHealthSuccess {
+  ok: true;
+  endpoint: string;
+  retrieved_at: string;
+  request_id: string;
+  response_kind: "result" | "error";
+  health_result?: string;
+  rpc_error?: {
+    code: number;
+    message: string;
+  };
+}
+
+export interface SolanaHealthFailure {
+  ok: false;
+  endpoint: string;
+  retrieved_at: string;
+  request_id: string;
+  reason_code: SolanaRpcReadFailureReasonCode;
+  details: string;
+  degradation: true;
+}
+
+export type SolanaHealthReadResult = SolanaHealthSuccess | SolanaHealthFailure;
+
+export interface SolanaReadAdapter {
+  getHealth(): Promise<SolanaHealthReadResult>;
+}
+
 export interface AdapterRegistry {
   configSource: ConfigSourceAdapter;
   evmRead: EvmReadAdapter;
+  solanaRead: SolanaReadAdapter;
 }

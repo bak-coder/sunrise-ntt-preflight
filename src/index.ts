@@ -82,7 +82,7 @@ function parseCli(argv: string[]): ParsedCli {
 
 async function runVerify(options: RuntimeOptions): Promise<void> {
   const checks = loadProfileChecks(options.profile);
-  const adapters = createAdapters();
+  const adapters = createAdapters({ rpcUrl: options.rpcUrl });
   const results = await runCheckLifecycle({ options, adapters }, checks);
   const report = buildVerifyReport(options, results);
   const reportPath = await writeVerifyReport(options.outputDir, report);
