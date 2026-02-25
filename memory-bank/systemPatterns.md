@@ -281,3 +281,5 @@ Phase 5 / Iteration 5.1.1 hardening: authoritative NTT peer.rs confirms NttManag
 Phase 5 / Iteration 5.2.1: Added CHK-012 executor-quote-sanity (mock-first).
 Policy: retrieval degradation -> SKIPPED; parse/shape invalid payload -> FAIL; minimal valid payload -> PASS.
 Scope intentionally shallow: top-level from_chain/to_chain/amount_out string checks only; no real quote HTTP integration in this iteration.
+
+Phase 5 / Iteration 5.2.2: CHK-012 extended from mock-first to mock+real dry-run quote retrieval using existing executor HTTP transport pattern; payload sanity logic unchanged (PASS/FAIL/SKIPPED semantics preserved).

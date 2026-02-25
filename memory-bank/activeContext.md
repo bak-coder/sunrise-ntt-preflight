@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CHK-012 mock-first quote sanity slice integrated in sunrise-executor profile after CHK-010.
-Следующий шаг: optional next iteration for plan mapping of CHK-012 failures (without changing CHK-012 semantics).
+Текущий фокус: CHK-012 supports mock + real dry-run retrieval with shared sanity validation path.
+Следующий шаг: optional plan mapping for CHK-012 FAIL (separate iteration).
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения
