@@ -234,3 +234,10 @@ ntt-preflight CLI
 ### Phase 3 / real-transition
 - Solana adapter now supports existence-only peer account read via derived peer PDA (`["peer", uint16_le(chain_id)]` + manager program id), with normalized `exists` result and degradation-safe failure mapping.
 - Explicitly no decimals/account deserialization yet.
+
+### Phase 3 / Iteration 3.5.2:
+CHK-007 now supports source routing:
+mock mode via fixture (existing path)
+rpc mode via Solana existence-only peer PDA reads
+Check contract/evidence shape unchanged.
+Rpc mode currently uses minimal peer-key → chain-id mapping and existence-only basis (no decimals parsing).
