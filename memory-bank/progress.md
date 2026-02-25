@@ -19,6 +19,7 @@
 - [2026-02-25] Phase 3 / Iteration 3.4: добавлен `scripts/demo-mock-flow.sh` для полного mock narrative (broken verify -> plan -> fixed re-verify); подтверждён fail-fast сценарий и стабильные artifact paths
 [2026-02-25] Phase 3 / Iteration 3.5.1: added Solana real-path adapter method for NTT peer account existence (PDA-derived, existence-only), with deterministic degradation handling for RPC/derivation failures; CHK-007 logic unchanged.
 [2026-02-25] Phase 3 / Iteration 3.5.2: CHK-007 switched to source-routed execution (mock fixture or rpc existence-only via Solana adapter), preserving deterministic first-fail behavior and evidence schema; rpc transport issues mapped to SKIPPED degradation.
+[2026-02-25] Phase 3 / Iteration 3.5.3: executed real rpc-mode CHK-007 smoke on Solana devnet (read-only), observed PASS, and confirmed structured evidence-shape parity with mock mode; no contract/semantics/guard changes.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата
