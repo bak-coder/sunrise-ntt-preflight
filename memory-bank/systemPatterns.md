@@ -100,3 +100,13 @@ ntt-preflight CLI
   - CONFIG_NOT_FOUND / CONFIG_UNREADABLE -> SKIPPED, degradation=true
   - CONFIG_PARSE_ERROR -> FAIL
 - Check подключён в registry профилей ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.
+
+### Iteration 2.2: First RPC-backed deterministic check
+- Добавлен read-only Solana RPC adapter (`getHealth`) в adapter layer.
+- Добавлен CHK-002 `solana-rpc-health-readiness` (blocking, deterministic).
+- Semantics:
+  - getHealth result "ok" -> PASS
+  - Валидный RPC response с error/non-ok -> FAIL
+  - Транспорт/timeout/invalid response -> SKIPPED с degradation=true
+- Reason codes для degradation: RPC_UNAVAILABLE, RPC_TIMEOUT, RPC_READ_ERROR, RPC_RESPONSE_INVALID.
+- Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.

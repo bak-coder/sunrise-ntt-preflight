@@ -2,12 +2,16 @@
 _Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Phase 2 / Iteration 2.1 завершена: реализован один real deterministic check (CHK-001) через read-only adapter contracts.
+Phase 2 / Iteration 2.2 завершена: реализован первый real RPC-backed deterministic check (Solana RPC health) через adapter layer.
 
 ## Следующий шаг
-Iteration 2.2: добавить следующий минимальный real check (или расширить CHK-001 до domain-level assertions), не меняя runtime semantics и guard-инварианты.
+Выбрать следующий минимальный domain-level check (NTT-specific) поверх уже работающих config + RPC readiness checks, не меняя runtime semantics и guards.
+
+## Открытые вопросы
+- Нужен ли в следующей итерации единый timeout flag для RPC adapters (без изменения core semantics)?
+- Как унифицировать трактовку RPC node error-response: operational FAIL vs policy-based SKIPPED для отдельных checks?
 
 ## Последние решения
 - Source of truth по статусам сохранён: PASS/FAIL/SKIPPED only.
-- Legacy WARN в старых заметках не используется для runtime semantics.
-- EVM источник пока оставлен как adapter contract/stub с TODO, без сетевой интеграции.
+- Legacy WARN в старых заметках не влияет на runtime model.
+- CHK-001 policy gap не менялся в Iteration 2.2.
