@@ -220,3 +220,13 @@ ntt-preflight CLI
 - Порядок шагов детерминирован и следует порядку checks (CHK-007 затем CHK-008).
 - При отсутствии actionable FAIL возвращается минимальный план: "No actions generated from current check failures."
 - Формат `tx-plan.md` / `tx-plan.json` сохранён (без schema расширения).
+
+### Phase 3 / Iteration 3.4: Demo-flow orchestration script (mock-first)
+- Добавлен `scripts/demo-mock-flow.sh` для repeatable narrative:
+  - broken mock verify -> actionable plan -> fixed mock re-verify.
+- Скрипт использует существующие CHK-007/CHK-008 + plan mapping (без новых check semantics).
+- Скрипт fail-fast проверяет ожидаемые состояния:
+  - broken: CHK-007/008 FAIL
+  - plan: содержит fix шаги для CHK-007/008
+  - fixed: CHK-007/008 PASS и `ci_should_fail=false`
+- Артефакты фиксированы по путям в `artifacts/demo-mock-flow/*`.
