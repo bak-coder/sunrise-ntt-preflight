@@ -1,0 +1,9 @@
+{
+  "network": "devnet",
+  "manager": {
+    "solanaProgramId": "11111111111111111111111111111111"
+  },
+  "peers": {
+    "ethereum": "0x123"
+  }
+}

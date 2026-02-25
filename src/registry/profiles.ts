@@ -3,6 +3,7 @@ import { executorCapabilityStub } from "../checks/stubs/executorCapabilityStub";
 import { configIntentSourceReadinessCheck } from "../checks/real/configIntentSourceReadiness";
 import { nttIntentManagerProgramIdInvariantCheck } from "../checks/real/nttIntentManagerProgramIdInvariant";
 import { nttPeerChainMappingPresenceCheck } from "../checks/real/nttPeerChainMappingPresence";
+import { nttPeerMappingEntryValueShapeCheck } from "../checks/real/nttPeerMappingEntryValueShape";
 import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthReadiness";
 
 export type ProfileName = "ntt-generic" | "sunrise-executor";
@@ -12,12 +13,14 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     configIntentSourceReadinessCheck,
     nttIntentManagerProgramIdInvariantCheck,
     nttPeerChainMappingPresenceCheck,
+    nttPeerMappingEntryValueShapeCheck,
     solanaRpcHealthReadinessCheck
   ],
   "sunrise-executor": [
     configIntentSourceReadinessCheck,
     nttIntentManagerProgramIdInvariantCheck,
     nttPeerChainMappingPresenceCheck,
+    nttPeerMappingEntryValueShapeCheck,
     solanaRpcHealthReadinessCheck,
     executorCapabilityStub
   ]
