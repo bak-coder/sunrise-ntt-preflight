@@ -115,8 +115,56 @@ export interface SolanaReadAdapter {
   ): Promise<SolanaPeerAccountExistenceResult>;
 }
 
+export type ExecutorHttpReadFailureReasonCode =
+  | "EXECUTOR_ENDPOINT_NOT_CONFIGURED"
+  | "EXECUTOR_ENDPOINT_INVALID"
+  | "EXECUTOR_HTTP_UNAVAILABLE"
+  | "EXECUTOR_HTTP_TIMEOUT"
+  | "EXECUTOR_HTTP_READ_ERROR"
+  | "EXECUTOR_MOCK_RESPONSE_INVALID";
+
+export interface ExecutorEndpointReachabilityInput {
+  endpoint?: string;
+  health_path?: string;
+  mock_mode: boolean;
+}
+
+export interface ExecutorEndpointReachabilitySuccess {
+  ok: true;
+  mode: "mock" | "real";
+  endpoint: string;
+  request_url: string;
+  retrieved_at: string;
+  request_id: string;
+  http_status: number;
+  reachable: boolean;
+}
+
+export interface ExecutorEndpointReachabilityFailure {
+  ok: false;
+  mode: "mock" | "real";
+  endpoint: string | null;
+  request_url: string | null;
+  retrieved_at: string;
+  request_id: string;
+  reason_code: ExecutorHttpReadFailureReasonCode;
+  details: string;
+  degradation: true;
+}
+
+export type ExecutorEndpointReachabilityResult =
+  | ExecutorEndpointReachabilitySuccess
+  | ExecutorEndpointReachabilityFailure;
+
+export interface ExecutorHttpAdapter {
+  getEndpointReachability(
+    input: ExecutorEndpointReachabilityInput
+  ): Promise<ExecutorEndpointReachabilityResult>;
+}
+
 export interface AdapterRegistry {
   configSource: ConfigSourceAdapter;
   evmRead: EvmReadAdapter;
   solanaRead: SolanaReadAdapter;
+  executorHttp: ExecutorHttpAdapter;
 }

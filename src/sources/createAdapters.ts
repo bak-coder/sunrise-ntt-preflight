@@ -1,6 +1,7 @@
 import { AdapterRegistry } from "./contracts";
 import { ConfigFileAdapter } from "./configFileAdapter";
 import { EvmReadStubAdapter } from "./evmReadStubAdapter";
+import { ExecutorHttpReachabilityAdapter } from "./executorHttpAdapter";
 import { SolanaRpcAdapter } from "./solanaRpcAdapter";
 
 interface CreateAdaptersInput {
@@ -13,6 +14,7 @@ export function createAdapters(input: CreateAdaptersInput): AdapterRegistry {
     evmRead: new EvmReadStubAdapter(),
     solanaRead: new SolanaRpcAdapter({
       endpoint: input.rpcUrl
-    })
+    }),
+    executorHttp: new ExecutorHttpReachabilityAdapter()
   };
 }
