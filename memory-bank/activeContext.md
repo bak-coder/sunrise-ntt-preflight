@@ -1,7 +1,7 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CHK-013 plan remediation mapping integrated and demo pipeline aligned.
+Current focus: structured report.json v2 shipped; demo/CI consumers updated; Tier1 gaps closed.
 Следующий шаг: optional final release checklist / artifact polish.
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 

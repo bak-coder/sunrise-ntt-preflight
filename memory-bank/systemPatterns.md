@@ -296,3 +296,5 @@ Phase 6 / Iteration 6.2.1: added deterministic GitHub Actions CI workflow (push 
 Phase 6 / Iteration 6.3.1: README made submission-ready with strict section order, real deterministic demo snippet, and CHK-001..013 matrix; no runtime/check/plan semantics changes.
 
 Phase 6 / Iteration 6.4: Added FAIL-driven tx-plan mapping for CHK-013 compute-budget-sanity using observed configuredGasLimit/requiredMinimum; PASS/SKIPPED remain non-actionable.
+
+Phase 6 / Iteration 6.5: report.json migrated to structured v2 (meta/checks/summary) with report.legacy.json compatibility; demo + smoke consumers updated.
