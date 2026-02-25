@@ -11,6 +11,7 @@
 - [2026-02-25] Phase 2 / Iteration 2.4: реализован CHK-004 (domain-level peer/chain mapping presence invariant: `peers` non-empty) через ConfigSourceAdapter; подтверждены success/fail smoke runs и report.json pipeline
 - [2026-02-25] Phase 2 / Iteration 2.5: реализован CHK-005 (domain-level peer mapping entry value shape sanity для top-level `peers`) через ConfigSourceAdapter; подключён в ntt-generic/sunrise-executor; smoke PASS+FAIL и report.json подтверждены
 - [2026-02-25] Phase 2 / Iteration 2.6: реализован CHK-006 (domain-level peer mapping key shape sanity для top-level `peers`) через ConfigSourceAdapter; подключён в ntt-generic/sunrise-executor; smoke PASS+FAIL и report.json подтверждены
+- [2026-02-25] Phase 2 / Iteration P1: исправлен false-green CI gap для missing required config через execution-level precondition gate (profiles: ntt-generic, sunrise-executor); verify теперь завершает процесс с non-zero до aggregation при CONFIG_NOT_FOUND/CONFIG_UNREADABLE
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

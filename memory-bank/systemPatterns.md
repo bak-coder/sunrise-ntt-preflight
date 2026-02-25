@@ -167,3 +167,13 @@ ntt-preflight CLI
   - invalid first key -> FAIL (NTT_PEER_MAPPING_KEY_INVALID)
   - all keys valid -> PASS
 - Check подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
+
+### Iteration P1: Required config precondition gate (false-green CI fix)
+- Проблема: CHK-001 может вернуть SKIPPED при отсутствии обязательного config (`CONFIG_NOT_FOUND` / `CONFIG_UNREADABLE`), а SKIPPED не фейлит CI.
+- Решение: execution-level precondition gate для verify (профили `ntt-generic`, `sunrise-executor`):
+  - перед запуском checks проверяется читаемость `--config`
+  - при ошибке чтения verify завершается non-zero до check aggregation
+- Важно:
+  - runtime status model не меняется (PASS/FAIL/SKIPPED)
+  - runtime guards/contracts не меняются
+  - check-level semantics CHK-001 не меняются (degradation mapping сохраняется)
