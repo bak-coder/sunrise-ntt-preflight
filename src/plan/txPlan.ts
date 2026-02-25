@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { TxPlan } from "../contracts/output";
 import { RuntimeOptions } from "../checks/types";
+import { CheckResult } from "../contracts/runtime";
 
 export function buildTxPlanSkeleton(options: RuntimeOptions): TxPlan {
   return {
@@ -12,6 +13,65 @@ export function buildTxPlanSkeleton(options: RuntimeOptions): TxPlan {
       "Preflight mode is read-only and does not sign or execute transactions."
     ],
     steps: []
+  };
+}
+
+function readObservedPair(result: CheckResult): string {
+  const data = result.evidence.data ?? {};
+  const observed = (data.observed as Record<string, unknown> | undefined) ?? {};
+  const pair = observed.first_failing_pair ?? observed.checked_pair;
+  return typeof pair === "string" ? pair : "unknown-pair";
+}
+
+function buildActionStepsFromResults(results: CheckResult[]): TxPlan["steps"];
+function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPlan["steps"] {
+  const list = Array.isArray(results) ? results : [results];
+  const actionable = list.filter((result) => result.status === "FAIL");
+  const steps: TxPlan["steps"] = [];
+
+  for (const result of actionable) {
+    if (result.check_id === "CHK-007-peer-registration-symmetry-mock") {
+      const pair = readObservedPair(result);
+      const rootCause = result.details;
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Fix peer-registration symmetry for ${pair}. Ensure both directional peer registrations exist before re-verify. ` +
+          `Observed root cause: ${rootCause}`,
+        requires_signature: true
+      });
+    }
+
+    if (result.check_id === "CHK-008-decimals-sync-mock") {
+      const pair = readObservedPair(result);
+      const rootCause = result.details;
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Align registration decimals for ${pair}. Update directional registrations to a consistent decimals value, then re-verify. ` +
+          `Observed root cause: ${rootCause}`,
+        requires_signature: true
+      });
+    }
+  }
+
+  return steps;
+}
+
+export function buildTxPlanFromCheckResults(
+  options: RuntimeOptions,
+  results: CheckResult[]
+): TxPlan {
+  const steps = buildActionStepsFromResults(results);
+  return {
+    generated_at: new Date().toISOString(),
+    profile: options.profile,
+    assumptions: [
+      "Plan is generated from check failures only (no transaction execution).",
+      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007 and CHK-008.",
+      "Preflight mode is read-only and does not sign or execute transactions."
+    ],
+    steps
   };
 }
 
@@ -26,7 +86,12 @@ export function renderTxPlanMarkdown(plan: TxPlan): string {
     ...plan.assumptions.map((item) => `- ${item}`),
     "",
     "## Steps",
-    ...(plan.steps.length === 0 ? ["- No steps generated in scaffold baseline."] : [])
+    ...(plan.steps.length === 0
+      ? ["- No actions generated from current check failures."]
+      : plan.steps.map(
+          (step, idx) =>
+            `${idx + 1}. [${step.id}] ${step.description} (requires_signature=${step.requires_signature})`
+        ))
   ].join("\n");
 }
 

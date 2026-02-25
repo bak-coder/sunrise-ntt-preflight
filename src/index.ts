@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 import { runCheckLifecycle } from "./checks/engine";
 import { RuntimeOptions } from "./checks/types";
-import { buildTxPlanSkeleton, writeTxPlanArtifacts } from "./plan/txPlan";
+import {
+  buildTxPlanFromCheckResults,
+  buildTxPlanSkeleton,
+  writeTxPlanArtifacts
+} from "./plan/txPlan";
 import { loadProfileChecks, ProfileName } from "./registry/profiles";
 import { createAdapters } from "./sources/createAdapters";
 import {
@@ -128,7 +132,12 @@ async function runVerify(options: RuntimeOptions): Promise<void> {
 }
 
 async function runPlan(options: RuntimeOptions): Promise<void> {
-  const plan = buildTxPlanSkeleton(options);
+  const adapters = createAdapters({ rpcUrl: options.rpcUrl });
+  const checks = loadProfileChecks(options.profile);
+  const results = await runCheckLifecycle({ options, adapters }, checks);
+  const plan = options.mockChain
+    ? buildTxPlanFromCheckResults(options, results)
+    : buildTxPlanSkeleton(options);
   const paths = await writeTxPlanArtifacts(options.outputDir, plan);
   console.log(`[plan] tx plan written to ${paths.markdownPath} and ${paths.jsonPath}`);
 }
