@@ -259,3 +259,8 @@ executor section
 required executor transceiver reference
 executor.transceivers non-empty list containing that reference
 Explicitly not on-chain transceiver registration validation.
+
+Phase 4 / Iteration 4.4:
+Extended plan mapping from CHK-007/008 to include executor failures CHK-009/010/011.
+Mapping remains FAIL-driven only; SKIPPED degradation handling unchanged.
+Action steps now include reason_code and concise evidence summary for operator guidance.

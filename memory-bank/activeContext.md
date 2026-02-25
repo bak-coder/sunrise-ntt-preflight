@@ -1,9 +1,9 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: Phase 4 / Iteration 4.3 завершена — добавлен thin config/domain check CHK-011 для executor transceiver presence.
-Следующий шаг: перейти к on-chain transceiver registration validation в отдельной итерации (без смешивания с config-presence логикой).
-Открытые вопросы: унифицировать долгосрочный конфиг-контракт для executor.transceiverAddress/reference и entry shape.
+Текущий фокус: Phase 4 / Iteration 4.4 завершена — plan mapping расширен для executor checks CHK-009/010/011.
+Следующий шаг: перейти к следующей итерации executor/on-chain readiness без расширения plan contract.
+Открытые вопросы: нужно ли в будущем отдельно маппить SKIPPED-degradation в advisory (non-action) steps.
 
 ## Последние решения
 - Demo orchestration остаётся mock-only и read-only.
