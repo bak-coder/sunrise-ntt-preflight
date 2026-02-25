@@ -4,6 +4,7 @@
 - [2026-02-25] Финализирован спек v6 (Sunrise NTT Preflight)
 - [2026-02-25] Заполнены все 6 файлов memory bank из спека v6
 - [2026-02-25] Bootstrap Gate: projectBrief, productContext, techContext, systemPatterns — заполнены минимумом
+- [2026-02-25] Реализован scaffold baseline: CLI verify/plan, runtime contracts и guards, lifecycle skeleton, profile registry, report.json и tx-plan contract artifacts; smoke run успешен
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

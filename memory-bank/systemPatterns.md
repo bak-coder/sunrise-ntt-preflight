@@ -76,3 +76,14 @@ ntt-preflight CLI
   - fail-on: none -> не фейлим по статусам checks
 - Инвариант: при неполных/недостоверных данных PASS запрещён.
 - Инвариант: при деградации внешней зависимости не допускается false PASS.
+
+### Scaffold implementation baseline (CLI + runtime contracts)
+- Реализован минимальный scaffold CLI: команды verify/plan.
+- Runtime status model в коде: PASS / FAIL / SKIPPED (WARN отсутствует).
+- Введены runtime guards:
+  - non-blocking + FAIL => contract violation
+  - SKIPPED без reason_code/details => contract violation
+  - PASS при degradation=true => contract violation
+- Check engine scaffold: sequential lifecycle, deterministic-first ordering.
+- Registry профилей подключён: ntt-generic, sunrise-executor.
+- Degradation path в scaffold маппится в SKIPPED (не PASS).
