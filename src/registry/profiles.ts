@@ -6,6 +6,7 @@ import { nttPeerChainMappingPresenceCheck } from "../checks/real/nttPeerChainMap
 import { nttPeerMappingKeyShapeCheck } from "../checks/real/nttPeerMappingKeyShape";
 import { nttPeerMappingEntryValueShapeCheck } from "../checks/real/nttPeerMappingEntryValueShape";
 import { peerRegistrationSymmetryMockCheck } from "../checks/real/peerRegistrationSymmetryMock";
+import { decimalsSyncMockCheck } from "../checks/real/decimalsSyncMock";
 import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthReadiness";
 
 export type ProfileName = "ntt-generic" | "sunrise-executor";
@@ -18,6 +19,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
     peerRegistrationSymmetryMockCheck,
+    decimalsSyncMockCheck,
     solanaRpcHealthReadinessCheck
   ],
   "sunrise-executor": [
@@ -27,6 +29,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
     peerRegistrationSymmetryMockCheck,
+    decimalsSyncMockCheck,
     solanaRpcHealthReadinessCheck,
     executorCapabilityStub
   ]
