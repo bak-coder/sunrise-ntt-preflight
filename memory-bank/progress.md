@@ -24,6 +24,7 @@
 [2026-02-25] Phase 4 / Iteration 4.2: implemented CHK-010 executor-relay-capabilities (mock-first + real /v0/capabilities) with minimal JSON shape validation and degradation-safe transport handling; integrated into sunrise-executor with CHK-009→CHK-010 ordering preserved.
 [2026-02-25] Phase 4 / Iteration 4.3: implemented CHK-011 executor-transceiver-config-presence (config/mock-only). Added shallow presence/shape validation for executor transceiver reference in config, wired into sunrise-executor before transport checks, and validated with PASS/FAIL smoke fixtures + stable check ordering.
 [2026-02-25] Phase 4 / Iteration 4.4: extended tx-plan actionable mapping for executor failures CHK-009/010/011 with deterministic ordering and enriched step text (reason_code + evidence summary); validated single-failure, mixed-failure, and no-actions fallback scenarios.
+[2026-02-25] Phase 4 / Iteration 4.5: extended scripts/demo-mock-flow.sh to include executor-layer failures (CHK-010/011) and corresponding plan actions from existing mappings; validated deterministic broken->plan->fixed narrative with predictable artifacts and fail-fast checks.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

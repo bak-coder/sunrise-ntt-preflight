@@ -264,3 +264,8 @@ Phase 4 / Iteration 4.4:
 Extended plan mapping from CHK-007/008 to include executor failures CHK-009/010/011.
 Mapping remains FAIL-driven only; SKIPPED degradation handling unchanged.
 Action steps now include reason_code and concise evidence summary for operator guidance.
+
+Phase 4 / Iteration 4.5:
+Demo orchestration expanded to include executor-layer failures (CHK-010, CHK-011) in mock narrative.
+Plan artifact now demonstrates executor remediation steps together with peer/decimals actions in one deterministic flow.
+No changes to check semantics/contracts; demo-only orchestration polish.

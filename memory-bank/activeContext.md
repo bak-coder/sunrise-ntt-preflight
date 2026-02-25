@@ -1,9 +1,9 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: Phase 4 / Iteration 4.4 завершена — plan mapping расширен для executor checks CHK-009/010/011.
-Следующий шаг: перейти к следующей итерации executor/on-chain readiness без расширения plan contract.
-Открытые вопросы: нужно ли в будущем отдельно маппить SKIPPED-degradation в advisory (non-action) steps.
+Текущий фокус: Phase 4 / Iteration 4.5 завершена — demo mock flow расширен до executor-layer failure narrative with actionable plan.
+Следующий шаг: подготовить следующий executor/on-chain iteration, не меняя demo contract.
+Открытые вопросы: нужен ли отдельный executor-only demo variant (без peer/decimals), или текущий mixed narrative оставить единственным.
 
 ## Последние решения
 - Demo orchestration остаётся mock-only и read-only.
