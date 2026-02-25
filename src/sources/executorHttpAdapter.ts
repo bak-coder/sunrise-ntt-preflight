@@ -351,61 +351,95 @@ export class ExecutorHttpReachabilityAdapter implements ExecutorHttpAdapter {
       };
     }
 
-    if (!input.mock_mode) {
+    if (input.mock_mode) {
+      let payload_raw: string;
+      try {
+        payload_raw = await readFile(quotePath, "utf8");
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return {
+          ok: false,
+          mode: "mock",
+          endpoint: input.endpoint,
+          request_url: quotePath,
+          retrieved_at,
+          request_id,
+          reason_code: "EXECUTOR_HTTP_READ_ERROR",
+          details: `Failed to read mock quote payload from ${quotePath}: ${message}`,
+          degradation: true
+        };
+      }
+
+      try {
+        const parsed = JSON.parse(payload_raw) as unknown;
+        return {
+          ok: true,
+          mode: "mock",
+          endpoint: input.endpoint,
+          request_url: quotePath,
+          retrieved_at,
+          request_id,
+          payload_raw,
+          payload_json: parsed,
+          parseable_json: true
+        };
+      } catch {
+        return {
+          ok: true,
+          mode: "mock",
+          endpoint: input.endpoint,
+          request_url: quotePath,
+          retrieved_at,
+          request_id,
+          payload_raw,
+          payload_json: null,
+          parseable_json: false
+        };
+      }
+    }
+
+    const real = await this.readRealGet({
+      endpoint: input.endpoint,
+      path: quotePath,
+      retrieved_at,
+      request_id
+    });
+    if (!real.ok) {
       return {
         ok: false,
         mode: "real",
         endpoint: input.endpoint,
-        request_url: null,
+        request_url: real.request_url,
         retrieved_at,
         request_id,
-        reason_code: "EXECUTOR_HTTP_READ_ERROR",
-        details:
-          "Real quote retrieval is not enabled in this iteration. Use --mock-chain with --executor-quote-path.",
-        degradation: true
-      };
-    }
-
-    let payload_raw: string;
-    try {
-      payload_raw = await readFile(quotePath, "utf8");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      return {
-        ok: false,
-        mode: "mock",
-        endpoint: input.endpoint,
-        request_url: quotePath,
-        retrieved_at,
-        request_id,
-        reason_code: "EXECUTOR_HTTP_READ_ERROR",
-        details: `Failed to read mock quote payload from ${quotePath}: ${message}`,
+        reason_code: real.reason_code,
+        details: real.details,
         degradation: true
       };
     }
 
     try {
-      const parsed = JSON.parse(payload_raw) as unknown;
+      const parsed = JSON.parse(real.payload_raw) as unknown;
       return {
         ok: true,
-        mode: "mock",
+        mode: "real",
         endpoint: input.endpoint,
-        request_url: quotePath,
+        request_url: real.request_url,
         retrieved_at,
         request_id,
-        payload_raw,
+        payload_raw: real.payload_raw,
         payload_json: parsed,
         parseable_json: true
       };
     } catch {
       return {
         ok: true,
-        mode: "mock",
+        mode: "real",
         endpoint: input.endpoint,
-        request_url: quotePath,
+        request_url: real.request_url,
         retrieved_at,
         request_id,
-        payload_raw,
+        payload_raw: real.payload_raw,
         payload_json: null,
         parseable_json: false
       };

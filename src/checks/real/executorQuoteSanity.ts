@@ -24,11 +24,11 @@ export const executorQuoteSanityCheck: CheckDefinition = {
         reason_code: quotePayload.reason_code,
         details: `Executor quote sanity check skipped: ${quotePayload.details}`,
         evidence: {
-          summary: "Quote payload source could not be retrieved due to mock source degradation.",
+          summary: "Quote payload source could not be retrieved due to transport/config degradation.",
           data: {
             source: "adapter/executor-http",
             assertion_basis:
-              "Quote sanity validation requires retrievable quote payload source in mock-first mode.",
+              "Quote sanity validation requires retrievable quote payload source in mock or real dry-run mode.",
             observed: {
               mode: quotePayload.mode,
               endpoint: quotePayload.endpoint,
