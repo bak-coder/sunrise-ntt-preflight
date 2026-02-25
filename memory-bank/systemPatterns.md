@@ -246,3 +246,8 @@ Phase 4 / Iteration 4.1:
 Added thin executor endpoint reachability check (CHK-009) with mock-first + real GET adapter path.
 Policy: reachability PASS only for HTTP 2xx; non-2xx is FAIL; transport/config degradation maps to SKIPPED.
 Explicitly no /v0/capabilities payload parsing yet (reserved for 4.2).
+
+Phase 4 / Iteration 4.2
+Added CHK-010 executor-relay-capabilities using existing executor HTTP adapter transport from 4.1.
+Minimal validation policy only: HTTP 2xx, parseable JSON, required top-level fields/types (supported_chains:string[], supported_relay_types:string[], status:string).
+Transport/config failures remain degradation-path SKIPPED; payload/status invalid maps to FAIL.

@@ -21,6 +21,7 @@
 [2026-02-25] Phase 3 / Iteration 3.5.2: CHK-007 switched to source-routed execution (mock fixture or rpc existence-only via Solana adapter), preserving deterministic first-fail behavior and evidence schema; rpc transport issues mapped to SKIPPED degradation.
 [2026-02-25] Phase 3 / Iteration 3.5.3: executed real rpc-mode CHK-007 smoke on Solana devnet (read-only), observed PASS, and confirmed structured evidence-shape parity with mock mode; no contract/semantics/guard changes.
 [2026-02-25] Phase 4 / Iteration 4.1: implemented CHK-009 executor-endpoint-reachability (mock-first + real HTTP GET) with deterministic adapter output and degradation-safe SKIPPED mapping; wired into sunrise-executor profile; smoke validated mock PASS/FAIL and real transport degradation path.
+[2026-02-25] Phase 4 / Iteration 4.2: implemented CHK-010 executor-relay-capabilities (mock-first + real /v0/capabilities) with minimal JSON shape validation and degradation-safe transport handling; integrated into sunrise-executor with CHK-009→CHK-010 ordering preserved.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата
