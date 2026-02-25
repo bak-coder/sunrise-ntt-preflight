@@ -5,6 +5,7 @@ import { nttIntentManagerProgramIdInvariantCheck } from "../checks/real/nttInten
 import { nttPeerChainMappingPresenceCheck } from "../checks/real/nttPeerChainMappingPresence";
 import { nttPeerMappingKeyShapeCheck } from "../checks/real/nttPeerMappingKeyShape";
 import { nttPeerMappingEntryValueShapeCheck } from "../checks/real/nttPeerMappingEntryValueShape";
+import { peerRegistrationSymmetryMockCheck } from "../checks/real/peerRegistrationSymmetryMock";
 import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthReadiness";
 
 export type ProfileName = "ntt-generic" | "sunrise-executor";
@@ -16,6 +17,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     nttPeerChainMappingPresenceCheck,
     nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
+    peerRegistrationSymmetryMockCheck,
     solanaRpcHealthReadinessCheck
   ],
   "sunrise-executor": [
@@ -24,6 +26,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     nttPeerChainMappingPresenceCheck,
     nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
+    peerRegistrationSymmetryMockCheck,
     solanaRpcHealthReadinessCheck,
     executorCapabilityStub
   ]

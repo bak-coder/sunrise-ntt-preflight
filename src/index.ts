@@ -20,7 +20,7 @@ const profilesRequiringConfig = new Set<ProfileName>(["ntt-generic", "sunrise-ex
 function printUsage(): void {
   console.log("Usage:");
   console.log(
-    "  ntt-preflight verify|plan --profile <ntt-generic|sunrise-executor> --rpc-url <url> [--config <path>] [--rpc-evm <url>] [--mock-chain] [--deep] [--output <dir>] [--fail-on <blocking|all|none>]"
+    "  ntt-preflight verify|plan --profile <ntt-generic|sunrise-executor> --rpc-url <url> [--config <path>] [--rpc-evm <url>] [--mock-chain [fixture]] [--deep] [--output <dir>] [--fail-on <blocking|all|none>]"
   );
 }
 
@@ -34,6 +34,29 @@ function getFlagValue(args: string[], flag: string): string | undefined {
 
 function hasFlag(args: string[], flag: string): boolean {
   return args.includes(flag);
+}
+
+function parseMockChainOption(args: string[]): { enabled: boolean; path: string } {
+  const idx = args.indexOf("--mock-chain");
+  if (idx === -1) {
+    return {
+      enabled: false,
+      path: "./fixtures/broken-state.json"
+    };
+  }
+
+  const maybePath = args[idx + 1];
+  if (maybePath && !maybePath.startsWith("--")) {
+    return {
+      enabled: true,
+      path: maybePath
+    };
+  }
+
+  return {
+    enabled: true,
+    path: "./fixtures/broken-state.json"
+  };
 }
 
 function parseProfile(value: string | undefined): ProfileName {
@@ -65,12 +88,15 @@ function parseCli(argv: string[]): ParsedCli {
     throw new Error("--rpc-url is required.");
   }
 
+  const mockChainOption = parseMockChainOption(rest);
+
   const options: RuntimeOptions = {
     profile,
     configPath: getFlagValue(rest, "--config") ?? "./ntt.json",
     rpcUrl,
     rpcEvm: getFlagValue(rest, "--rpc-evm"),
-    mockChain: hasFlag(rest, "--mock-chain"),
+    mockChain: mockChainOption.enabled,
+    mockChainPath: mockChainOption.path,
     deep: hasFlag(rest, "--deep"),
     outputDir: getFlagValue(rest, "--output") ?? "./artifacts",
     failOn: parseFailOn(getFlagValue(rest, "--fail-on"))

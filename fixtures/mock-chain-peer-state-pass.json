@@ -1,0 +1,19 @@
+{
+  "_schema": "registrations[] directional records; reusable for CHK-007 symmetry and future CHK-008 decimals",
+  "registrations": [
+    {
+      "from": "solana",
+      "to": "ethereum",
+      "registered": true,
+      "peerAddress": "0x1111111111111111111111111111111111111111",
+      "decimals": 6
+    },
+    {
+      "from": "ethereum",
+      "to": "solana",
+      "registered": true,
+      "peerAddress": "11111111111111111111111111111111",
+      "decimals": 6
+    }
+  ]
+}

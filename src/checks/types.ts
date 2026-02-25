@@ -7,6 +7,7 @@ export interface RuntimeOptions {
   rpcUrl: string;
   rpcEvm?: string;
   mockChain: boolean;
+  mockChainPath: string;
   deep: boolean;
   outputDir: string;
   failOn: "blocking" | "all" | "none";
