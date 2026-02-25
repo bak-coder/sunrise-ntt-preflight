@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: demo narrative now explicitly covers CHK-012 remediation and CHK-013 verify-only threshold evidence.
-Следующий шаг: optional dedicated plan mapping iteration for CHK-013 (if desired).
+Текущий фокус: CI workflow added for deterministic demo smoke on push/pull_request.
+Следующий шаг: optional cleanup/commit pass to make working tree clean.
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения

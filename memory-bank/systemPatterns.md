@@ -290,3 +290,5 @@ Phase 5 / Iteration 5.3.1: Added CHK-013 compute-budget-sanity as static determi
 Semantics: FAIL only when parseable gasLimit is below threshold; source/field uncertainty maps to SKIPPED degradation.
 
 Phase 6 / Iteration 6.1.1: demo mock flow updated to explicitly surface CHK-012 FAIL -> plan remediation step and CHK-013 FAIL as verify-only signal; fixed state now asserts CHK-012/013 PASS without changing check/plan semantics.
+
+Phase 6 / Iteration 6.2.1: added deterministic GitHub Actions CI workflow (push + pull_request) running npm ci + scripts/demo-mock-flow.sh with no secrets/network dependencies.
