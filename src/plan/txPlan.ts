@@ -115,6 +115,24 @@ function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPl
         requires_signature: false
       });
     }
+
+    if (result.check_id === "CHK-013-compute-budget-sanity") {
+      const data = result.evidence.data ?? {};
+      const observed = (data.observed as Record<string, unknown> | undefined) ?? {};
+      const configuredGasLimit =
+        typeof observed.configuredGasLimit === "number"
+          ? observed.configuredGasLimit
+          : "unknown";
+      const requiredMinimum =
+        typeof observed.requiredMinimum === "number" ? observed.requiredMinimum : "unknown";
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Increase gasLimit to >= ${requiredMinimum} (current ${configuredGasLimit}) and re-verify. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
+        requires_signature: false
+      });
+    }
   }
 
   return steps;
@@ -130,7 +148,7 @@ export function buildTxPlanFromCheckResults(
     profile: options.profile,
     assumptions: [
       "Plan is generated from check failures only (no transaction execution).",
-      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007/008 and executor checks CHK-009/010/011/012.",
+      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007/008 and executor checks CHK-009/010/011/012/013.",
       "Preflight mode is read-only and does not sign or execute transactions."
     ],
     steps
