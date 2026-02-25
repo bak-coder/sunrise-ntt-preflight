@@ -241,3 +241,8 @@ mock mode via fixture (existing path)
 rpc mode via Solana existence-only peer PDA reads
 Check contract/evidence shape unchanged.
 Rpc mode currently uses minimal peer-key → chain-id mapping and existence-only basis (no decimals parsing).
+
+Phase 4 / Iteration 4.1:
+Added thin executor endpoint reachability check (CHK-009) with mock-first + real GET adapter path.
+Policy: reachability PASS only for HTTP 2xx; non-2xx is FAIL; transport/config degradation maps to SKIPPED.
+Explicitly no /v0/capabilities payload parsing yet (reserved for 4.2).

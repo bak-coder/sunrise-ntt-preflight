@@ -1,9 +1,9 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: Phase 3 / Iteration 3.5.3 завершена — выполнен real rpc smoke для CHK-007 и подтверждена evidence-shape parity с mock mode.
-Следующий шаг: при необходимости провести контролируемый real rpc FAIL-case smoke (без изменения логики) для демонстрации root-cause строки в live rpc path.
-Открытые вопросы: нужен ли отдельный стабильный failing rpc target для repeatable CI/demo проверки FAIL-ветки CHK-007.
+Текущий фокус: Phase 4 / Iteration 4.1 завершена — добавлен thin executor reachability check (mock-first + real GET), без capabilities parsing.
+Следующий шаг: Phase 4 / Iteration 4.2 — добавить /v0/capabilities parsing/validation поверх уже готового adapter reachability слоя.
+Открытые вопросы: выбрать стабильный публичный/локальный endpoint для repeatable real-PASS smoke в текущей среде, где возможны outbound ограничения.
 
 ## Последние решения
 - Demo orchestration остаётся mock-only и read-only.
