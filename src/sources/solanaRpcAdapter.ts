@@ -23,6 +23,44 @@ function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError";
 }
 
+function parsePeerTokenDecimalsFromAccountValue(
+  value: unknown
+): { ok: true; decimals: number } | { ok: false; details: string } {
+  if (typeof value !== "object" || value === null) {
+    return { ok: false, details: "Account info value is not an object." };
+  }
+
+  const rawData = (value as { data?: unknown }).data;
+  if (
+    !Array.isArray(rawData) ||
+    rawData.length < 2 ||
+    typeof rawData[0] !== "string" ||
+    typeof rawData[1] !== "string"
+  ) {
+    return { ok: false, details: "Account info value.data is not [base64, encoding]." };
+  }
+
+  let decoded: Buffer;
+  try {
+    decoded = Buffer.from(rawData[0], "base64");
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: false, details: `Failed to decode base64 account data: ${message}` };
+  }
+
+  // Assumption from NTT peer account layout in project docs:
+  // [0..7] Anchor discriminator, [8..39] peer address bytes, [40] tokenDecimals (u8).
+  const decimalsOffset = 8 + 32;
+  if (decoded.length <= decimalsOffset) {
+    return {
+      ok: false,
+      details: `Decoded account data too short for decimals at offset ${decimalsOffset}; len=${decoded.length}.`
+    };
+  }
+
+  return { ok: true, decimals: decoded.readUInt8(decimalsOffset) };
+}
+
 export class SolanaRpcAdapter implements SolanaReadAdapter {
   private endpoint: string;
   private timeoutMs: number;
@@ -233,11 +271,28 @@ export class SolanaRpcAdapter implements SolanaReadAdapter {
         manager_program_id,
         chain_id,
         pda,
-        exists: false
+        exists: false,
+        decimals: null,
+        decimals_source: "not-applicable-account-missing"
       };
     }
 
     if (typeof value === "object" && value !== null) {
+      const parsed = parsePeerTokenDecimalsFromAccountValue(value);
+      if (!parsed.ok) {
+        return {
+          ok: false,
+          endpoint: this.endpoint,
+          retrieved_at,
+          request_id,
+          manager_program_id,
+          chain_id,
+          reason_code: "PEER_ACCOUNT_DECIMALS_UNPARSEABLE",
+          details: parsed.details,
+          degradation: true
+        };
+      }
+
       return {
         ok: true,
         endpoint: this.endpoint,
@@ -246,7 +301,9 @@ export class SolanaRpcAdapter implements SolanaReadAdapter {
         manager_program_id,
         chain_id,
         pda,
-        exists: true
+        exists: true,
+        decimals: parsed.decimals,
+        decimals_source: "peer-account-token-decimals-offset-40"
       };
     }
 

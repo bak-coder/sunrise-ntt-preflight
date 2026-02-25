@@ -22,6 +22,24 @@ function titleChain(value: string): string {
   return value.length === 0 ? value : `${value[0].toUpperCase()}${value.slice(1)}`;
 }
 
+const LOCAL_CHAIN = "solana";
+const LOCAL_CHAIN_ID = 1;
+
+const WORMHOLE_CHAIN_ID_BY_KEY: Record<string, number> = {
+  solana: 1,
+  ethereum: 2,
+  bsc: 4,
+  polygon: 5,
+  avalanche: 6,
+  arbitrum: 23,
+  optimism: 24,
+  base: 30
+};
+
+function chainKeyToId(chainKey: string): number | null {
+  return WORMHOLE_CHAIN_ID_BY_KEY[chainKey] ?? null;
+}
+
 function toDirectionalRegistrations(
   parsed: unknown
 ): { ok: true; entries: MockDirectionalRegistration[] } | { ok: false; details: string } {
@@ -70,32 +88,6 @@ export const decimalsSyncMockCheck: CheckDefinition = {
   severity_class: "blocking",
   deterministic: true,
   async run(context) {
-    if (!context.options.mockChain) {
-      return {
-        status: "SKIPPED",
-        reason_code: "MOCK_CHAIN_DISABLED",
-        details: "CHK-008 runs only in --mock-chain mode for this iteration.",
-        evidence: {
-          summary: "Mock-chain mode is disabled; decimals-sync mock check not executed.",
-          data: {
-            source: "mock-chain-fixture",
-            assertion_basis: "Decimals sync is validated from mock fixture in iteration 3.2.",
-            observed: {
-              mock_chain_enabled: false,
-              mock_chain_path: context.options.mockChainPath
-            },
-            expected: {
-              mock_chain_enabled: true
-            },
-            retrieval_marker: new Date().toISOString(),
-            degradation: true
-          }
-        },
-        degradation: true,
-        source: "mock-chain-fixture"
-      };
-    }
-
     const configRead = await context.adapters.configSource.readConfig(context.options.configPath);
     if (!configRead.ok) {
       return {
@@ -177,8 +169,255 @@ export const decimalsSyncMockCheck: CheckDefinition = {
       };
     }
 
-    const localChain = "solana";
+    const localChain = LOCAL_CHAIN;
     const expectedPeers = Object.keys(peers).map(normalizeChain);
+
+    if (!context.options.mockChain) {
+      const managerRaw = configRoot?.manager;
+      const manager = asObject(managerRaw);
+      const managerProgramId =
+        manager && typeof manager.solanaProgramId === "string" ? manager.solanaProgramId.trim() : "";
+      if (!managerProgramId) {
+        return {
+          status: "FAIL",
+          reason_code: "NTT_MANAGER_PROGRAM_ID_MISSING",
+          details: "Cannot run CHK-008 rpc mode: manager.solanaProgramId is missing in config.",
+          evidence: {
+            summary: "CHK-008 rpc mode requires manager.solanaProgramId.",
+            data: {
+              source: configRead.source_kind,
+              assertion_basis:
+                "RPC mode derives peer PDA by manager program id and chain identifier before decimals comparison.",
+              observed: {
+                config_path: configRead.path,
+                manager_solana_program_id_present: false
+              },
+              expected: {
+                manager_solana_program_id_present: true
+              },
+              retrieval_marker: configRead.retrieved_at,
+              degradation: false
+            }
+          },
+          degradation: false,
+          source: "adapter/config-file"
+        };
+      }
+
+      for (const peerChain of expectedPeers) {
+        const peerChainId = chainKeyToId(peerChain);
+        if (peerChainId === null) {
+          return {
+            status: "FAIL",
+            reason_code: "NTT_CHAIN_ID_MAPPING_UNSUPPORTED",
+            details: `Unsupported peer chain key '${peerChain}' for CHK-008 rpc mode chain-id mapping.`,
+            evidence: {
+              summary: "CHK-008 rpc mode could not derive chain identifier for peer key.",
+              data: {
+                source: "adapter/config-file",
+                assertion_basis:
+                  "RPC mode currently maps known top-level peers keys to Wormhole chain ids.",
+                observed: {
+                  peer_key: peerChain
+                },
+                expected: {
+                  chain_id_mapping_available: true
+                },
+                retrieval_marker: configRead.retrieved_at,
+                degradation: false
+              }
+            },
+            degradation: false,
+            source: "adapter/config-file"
+          };
+        }
+
+        const forward = await context.adapters.solanaRead.getPeerAccountExistence({
+          manager_program_id: managerProgramId,
+          chain_id: peerChainId
+        });
+        if (!forward.ok) {
+          return {
+            status: "SKIPPED",
+            reason_code: forward.reason_code,
+            details: `CHK-008 rpc mode read failed for ${localChain}->${peerChain}: ${forward.details}`,
+            evidence: {
+              summary: "RPC source unavailable while reading forward-direction decimals metadata.",
+              data: {
+                source: "adapter/solana-rpc",
+                assertion_basis:
+                  "CHK-008 rpc mode reads NTT peer PDA data and extracts token decimals per direction.",
+                observed: {
+                  checked_pair: `${localChain}<->${peerChain}`,
+                  direction: `${localChain}->${peerChain}`,
+                  chain_id: peerChainId
+                },
+                expected: {
+                  rpc_readable: true
+                },
+                retrieval_marker: forward.retrieved_at,
+                degradation: true
+              }
+            },
+            degradation: true,
+            source: "adapter/solana-rpc"
+          };
+        }
+
+        const reverse = await context.adapters.solanaRead.getPeerAccountExistence({
+          manager_program_id: managerProgramId,
+          chain_id: LOCAL_CHAIN_ID
+        });
+        if (!reverse.ok) {
+          return {
+            status: "SKIPPED",
+            reason_code: reverse.reason_code,
+            details: `CHK-008 rpc mode read failed for ${peerChain}->${localChain}: ${reverse.details}`,
+            evidence: {
+              summary: "RPC source unavailable while reading reverse-direction decimals metadata.",
+              data: {
+                source: "adapter/solana-rpc",
+                assertion_basis:
+                  "CHK-008 rpc mode reads NTT peer PDA data and extracts token decimals per direction.",
+                observed: {
+                  checked_pair: `${localChain}<->${peerChain}`,
+                  direction: `${peerChain}->${localChain}`,
+                  chain_id: LOCAL_CHAIN_ID
+                },
+                expected: {
+                  rpc_readable: true
+                },
+                retrieval_marker: reverse.retrieved_at,
+                degradation: true
+              }
+            },
+            degradation: true,
+            source: "adapter/solana-rpc"
+          };
+        }
+
+        if (!forward.exists || !reverse.exists) {
+          return {
+            status: "FAIL",
+            reason_code: "NTT_DECIMALS_REGISTRATION_MISSING",
+            details: `Missing required registration record(s) for decimals comparison: ${titleChain(
+              localChain
+            )}<->${titleChain(peerChain)}`,
+            evidence: {
+              summary: "Cannot compare decimals because directional registration record is missing in rpc mode.",
+              data: {
+                source: "adapter/solana-rpc",
+                assertion_basis: "Both directions must have registered records before decimals comparison.",
+                observed: {
+                  checked_pair: `${localChain}<->${peerChain}`,
+                  forward_present: forward.exists,
+                  reverse_present: reverse.exists,
+                  forward_registered: forward.exists,
+                  reverse_registered: reverse.exists
+                },
+                expected: {
+                  forward_registered: true,
+                  reverse_registered: true
+                },
+                retrieval_marker: new Date().toISOString(),
+                degradation: false
+              }
+            },
+            degradation: false,
+            source: "adapter/solana-rpc"
+          };
+        }
+
+        if (typeof forward.decimals !== "number" || typeof reverse.decimals !== "number") {
+          return {
+            status: "FAIL",
+            reason_code: "NTT_DECIMALS_REGISTRATION_MISSING",
+            details: `Missing decimals metadata for comparison at pair ${titleChain(
+              localChain
+            )}<->${titleChain(peerChain)}`,
+            evidence: {
+              summary: "Directional registrations exist but decimals metadata is incomplete in rpc mode.",
+              data: {
+                source: "adapter/solana-rpc",
+                assertion_basis: "Both directional registrations must provide decimals for comparison.",
+                observed: {
+                  checked_pair: `${localChain}<->${peerChain}`,
+                  forward_decimals: forward.decimals ?? null,
+                  reverse_decimals: reverse.decimals ?? null
+                },
+                expected: {
+                  forward_decimals_type: "number",
+                  reverse_decimals_type: "number"
+                },
+                retrieval_marker: new Date().toISOString(),
+                degradation: false
+              }
+            },
+            degradation: false,
+            source: "adapter/solana-rpc"
+          };
+        }
+
+        if (forward.decimals !== reverse.decimals) {
+          const rootCauseLine = `${titleChain(localChain)}->${titleChain(peerChain)} decimals=${
+            forward.decimals
+          } / ${titleChain(peerChain)}->${titleChain(localChain)} decimals=${
+            reverse.decimals
+          } (MISMATCH)`;
+          return {
+            status: "FAIL",
+            reason_code: "NTT_DECIMALS_MISMATCH",
+            details: rootCauseLine,
+            evidence: {
+              summary: "Detected decimals mismatch across registration directions.",
+              data: {
+                source: "adapter/solana-rpc",
+                assertion_basis: "Directional registration decimals must be equal for each expected pair.",
+                observed: {
+                  checked_pair: `${localChain}<->${peerChain}`,
+                  first_failing_pair: `${localChain}<->${peerChain}`,
+                  forward_decimals: forward.decimals,
+                  reverse_decimals: reverse.decimals,
+                  root_cause_line: rootCauseLine
+                },
+                expected: {
+                  decimals_equal: true
+                },
+                retrieval_marker: new Date().toISOString(),
+                degradation: false
+              }
+            },
+            degradation: false,
+            source: "adapter/solana-rpc"
+          };
+        }
+      }
+
+      return {
+        status: "PASS",
+        reason_code: null,
+        details: "All expected peer pairs have matching decimals in rpc mode.",
+        evidence: {
+          summary: "No decimals mismatch detected for expected peer registration pairs in rpc mode.",
+          data: {
+            source: "adapter/solana-rpc",
+            assertion_basis:
+              "Directional registration decimals must be equal for each expected pair.",
+            observed: {
+              local_chain: localChain,
+              checked_pairs: expectedPeers.map((peerChain) => `${localChain}<->${peerChain}`)
+            },
+            expected: {
+              decimals_equal: true
+            },
+            retrieval_marker: new Date().toISOString(),
+            degradation: false
+          }
+        },
+        degradation: false,
+        source: "adapter/solana-rpc"
+      };
+    }
 
     const mockRead = await context.adapters.configSource.readConfig(context.options.mockChainPath);
     if (!mockRead.ok) {

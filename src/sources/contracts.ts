@@ -49,7 +49,8 @@ export type SolanaRpcReadFailureReasonCode =
   | "RPC_TIMEOUT"
   | "RPC_READ_ERROR"
   | "RPC_RESPONSE_INVALID"
-  | "PEER_PDA_DERIVATION_FAILED";
+  | "PEER_PDA_DERIVATION_FAILED"
+  | "PEER_ACCOUNT_DECIMALS_UNPARSEABLE";
 
 export interface SolanaHealthSuccess {
   ok: true;
@@ -90,6 +91,10 @@ export interface SolanaPeerAccountExistenceSuccess {
   chain_id: number;
   pda: string;
   exists: boolean;
+  decimals: number | null;
+  decimals_source:
+    | "peer-account-token-decimals-offset-40"
+    | "not-applicable-account-missing";
 }
 
 export interface SolanaPeerAccountExistenceFailure {
