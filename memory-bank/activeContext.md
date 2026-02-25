@@ -2,13 +2,16 @@
 _Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Документирование behavior после Iteration P1: добавлена README заметка про execution-level precondition gate vs check-level statuses.
+Phase 3 / Iteration 3.1 завершена: реализован mock-first вертикальный срез CHK-007 (peer-registration symmetry) с root-cause evidence.
 
 ## Следующий шаг
-Вернуться к следующему узкому implementation-step без изменения runtime semantics/guards.
+Перейти к следующему mock-first шагу (CHK-008 decimals mismatch) на том же fixture model, без real RPC path в этой фазе.
 
 ## Открытые вопросы
-- Нужно ли дублировать этот note в отдельной CI/GitHub Action секции docs?
+- Когда переключать CHK-007 с mock-only на hybrid/mock+real path без нарушения deterministic core?
+- Как формально зафиксировать local chain derivation policy для symmetry checks (сейчас: `solana` в mock-slice)?
 
 ## Последние решения
-- Документация закрепляет: missing required config -> non-zero exit до aggregation; CHK-001 semantics не меняются.
+- CHK-007 остаётся mock-chain only в Iteration 3.1.
+- Runtime model и runtime guards не менялись.
+- Fixture schema для `registrations[]` признана базой для CHK-007 и будущего CHK-008.

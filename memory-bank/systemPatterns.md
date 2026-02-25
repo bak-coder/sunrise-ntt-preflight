@@ -183,3 +183,15 @@ ntt-preflight CLI
   - execution-level precondition gates
   - check-level statuses (PASS/FAIL/SKIPPED)
 - Явно задокументировано, что missing required config фейлит verify до aggregation (non-zero exit), при этом CHK-001 сохраняет check-level SKIPPED semantics.
+
+### Phase 3 / Iteration 3.1: CHK-007 mock-first peer-registration symmetry
+- Добавлен CHK-007 `peer-registration-symmetry-mock` (blocking, deterministic, mock-chain only).
+- В этой итерации check работает только в mock-mode (`--mock-chain [fixture]`), без real RPC/on-chain reads.
+- Assertion: для ожидаемых peer pair из config (`top-level peers`) регистрация должна быть симметричной:
+  - local->peer == peer->local
+- First-fail semantics: при первом асимметричном pair check возвращает FAIL с root-cause строкой:
+  - `Solana->X: REGISTERED / X->Solana: MISSING`
+- Mock fixture schema (reusable):
+  - `registrations[]` с direction records `{from,to,registered,peerAddress?,decimals?}`
+  - поле `decimals` оставлено для будущего CHK-008 (decimals mismatch).
+- CHK-007 подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
