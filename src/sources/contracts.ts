@@ -93,7 +93,7 @@ export interface SolanaPeerAccountExistenceSuccess {
   exists: boolean;
   decimals: number | null;
   decimals_source:
-    | "peer-account-token-decimals-offset-40"
+    | "peer-account-token-decimals-offset-41"
     | "not-applicable-account-missing";
 }
 

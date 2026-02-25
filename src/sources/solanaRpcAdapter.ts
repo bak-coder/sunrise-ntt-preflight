@@ -48,9 +48,12 @@ function parsePeerTokenDecimalsFromAccountValue(
     return { ok: false, details: `Failed to decode base64 account data: ${message}` };
   }
 
-  // Assumption from NTT peer account layout in project docs:
-  // [0..7] Anchor discriminator, [8..39] peer address bytes, [40] tokenDecimals (u8).
-  const decimalsOffset = 8 + 32;
+  // Authoritative source (Wormhole NTT Solana program):
+  // https://raw.githubusercontent.com/wormhole-foundation/native-token-transfers/main/solana/programs/example-native-token-transfers/src/peer.rs
+  // #[account] pub struct NttManagerPeer { bump: u8, address: [u8; 32], token_decimals: u8 }
+  // Anchor account data layout:
+  // [0..7] discriminator, [8] bump, [9..40] address bytes, [41] token_decimals (u8).
+  const decimalsOffset = 8 + 1 + 32;
   if (decoded.length <= decimalsOffset) {
     return {
       ok: false,
@@ -303,7 +306,7 @@ export class SolanaRpcAdapter implements SolanaReadAdapter {
         pda,
         exists: true,
         decimals: parsed.decimals,
-        decimals_source: "peer-account-token-decimals-offset-40"
+        decimals_source: "peer-account-token-decimals-offset-41"
       };
     }
 
