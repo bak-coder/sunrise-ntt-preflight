@@ -24,7 +24,7 @@ const profilesRequiringConfig = new Set<ProfileName>(["ntt-generic", "sunrise-ex
 function printUsage(): void {
   console.log("Usage:");
   console.log(
-    "  ntt-preflight verify|plan --profile <ntt-generic|sunrise-executor> --rpc-url <url> [--config <path>] [--rpc-evm <url>] [--executor-url <url>] [--executor-health-path <path>] [--mock-chain [fixture]] [--deep] [--output <dir>] [--fail-on <blocking|all|none>]"
+    "  ntt-preflight verify|plan --profile <ntt-generic|sunrise-executor> --rpc-url <url> [--config <path>] [--rpc-evm <url>] [--executor-url <url>] [--executor-health-path <path>] [--executor-capabilities-path <path>] [--mock-chain [fixture]] [--deep] [--output <dir>] [--fail-on <blocking|all|none>]"
   );
 }
 
@@ -101,6 +101,7 @@ function parseCli(argv: string[]): ParsedCli {
     rpcEvm: getFlagValue(rest, "--rpc-evm"),
     executorUrl: getFlagValue(rest, "--executor-url"),
     executorHealthPath: getFlagValue(rest, "--executor-health-path") ?? "/",
+    executorCapabilitiesPath: getFlagValue(rest, "--executor-capabilities-path") ?? "/v0/capabilities",
     mockChain: mockChainOption.enabled,
     mockChainPath: mockChainOption.path,
     deep: hasFlag(rest, "--deep"),

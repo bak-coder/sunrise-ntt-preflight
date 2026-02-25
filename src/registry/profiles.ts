@@ -1,5 +1,4 @@
 import { CheckDefinition } from "../checks/types";
-import { executorCapabilityStub } from "../checks/stubs/executorCapabilityStub";
 import { configIntentSourceReadinessCheck } from "../checks/real/configIntentSourceReadiness";
 import { nttIntentManagerProgramIdInvariantCheck } from "../checks/real/nttIntentManagerProgramIdInvariant";
 import { nttPeerChainMappingPresenceCheck } from "../checks/real/nttPeerChainMappingPresence";
@@ -9,6 +8,7 @@ import { peerRegistrationSymmetryMockCheck } from "../checks/real/peerRegistrati
 import { decimalsSyncMockCheck } from "../checks/real/decimalsSyncMock";
 import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthReadiness";
 import { executorEndpointReachabilityCheck } from "../checks/real/executorEndpointReachability";
+import { executorRelayCapabilitiesCheck } from "../checks/real/executorRelayCapabilities";
 
 export type ProfileName = "ntt-generic" | "sunrise-executor";
 
@@ -33,7 +33,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     decimalsSyncMockCheck,
     solanaRpcHealthReadinessCheck,
     executorEndpointReachabilityCheck,
-    executorCapabilityStub
+    executorRelayCapabilitiesCheck
   ]
 };
 

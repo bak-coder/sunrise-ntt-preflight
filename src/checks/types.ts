@@ -8,6 +8,7 @@ export interface RuntimeOptions {
   rpcEvm?: string;
   executorUrl?: string;
   executorHealthPath?: string;
+  executorCapabilitiesPath?: string;
   mockChain: boolean;
   mockChainPath: string;
   deep: boolean;

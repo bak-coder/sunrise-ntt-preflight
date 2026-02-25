@@ -121,7 +121,8 @@ export type ExecutorHttpReadFailureReasonCode =
   | "EXECUTOR_HTTP_UNAVAILABLE"
   | "EXECUTOR_HTTP_TIMEOUT"
   | "EXECUTOR_HTTP_READ_ERROR"
-  | "EXECUTOR_MOCK_RESPONSE_INVALID";
+  | "EXECUTOR_MOCK_RESPONSE_INVALID"
+  | "EXECUTOR_CAPABILITIES_RESPONSE_INVALID";
 
 export interface ExecutorEndpointReachabilityInput {
   endpoint?: string;
@@ -156,10 +157,48 @@ export type ExecutorEndpointReachabilityResult =
   | ExecutorEndpointReachabilitySuccess
   | ExecutorEndpointReachabilityFailure;
 
+export interface ExecutorCapabilitiesReadInput {
+  endpoint?: string;
+  capabilities_path?: string;
+  mock_mode: boolean;
+}
+
+export interface ExecutorCapabilitiesReadSuccess {
+  ok: true;
+  mode: "mock" | "real";
+  endpoint: string;
+  request_url: string;
+  retrieved_at: string;
+  request_id: string;
+  http_status: number;
+  payload_raw: string;
+  payload_json: unknown | null;
+  parseable_json: boolean;
+}
+
+export interface ExecutorCapabilitiesReadFailure {
+  ok: false;
+  mode: "mock" | "real";
+  endpoint: string | null;
+  request_url: string | null;
+  retrieved_at: string;
+  request_id: string;
+  reason_code: ExecutorHttpReadFailureReasonCode;
+  details: string;
+  degradation: true;
+}
+
+export type ExecutorCapabilitiesReadResult =
+  | ExecutorCapabilitiesReadSuccess
+  | ExecutorCapabilitiesReadFailure;
+
 export interface ExecutorHttpAdapter {
   getEndpointReachability(
     input: ExecutorEndpointReachabilityInput
   ): Promise<ExecutorEndpointReachabilityResult>;
+  getRelayCapabilities(
+    input: ExecutorCapabilitiesReadInput
+  ): Promise<ExecutorCapabilitiesReadResult>;
 }
 
 export interface AdapterRegistry {
