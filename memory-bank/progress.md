@@ -26,6 +26,7 @@
 [2026-02-25] Phase 4 / Iteration 4.4: extended tx-plan actionable mapping for executor failures CHK-009/010/011 with deterministic ordering and enriched step text (reason_code + evidence summary); validated single-failure, mixed-failure, and no-actions fallback scenarios.
 [2026-02-25] Phase 4 / Iteration 4.5: extended scripts/demo-mock-flow.sh to include executor-layer failures (CHK-010/011) and corresponding plan actions from existing mappings; validated deterministic broken->plan->fixed narrative with predictable artifacts and fail-fast checks.
 [2026-02-25] Phase 5 / Iteration 5.1: implemented real-path Solana decimals parsing for CHK-008 rpc mode (minimal tokenDecimals extraction), added degradation-safe parse failure reason, preserved mock behavior/evidence schema/runtime contracts, and validated rpc mismatch detection with deterministic smoke.
+[2026-02-25] Phase 5 / Iteration 5.1.1: validated CHK-008 Solana peer account decimals layout against authoritative upstream source; corrected parsing offset to 41; preserved runtime contracts and degradation behavior.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: Phase 5 / Iteration 5.1 завершена — CHK-008 rpc mode upgraded from existence-only to decimals-based comparison.
-Следующий шаг: validate/account-layout assumption against authoritative NTT IDL and expand real-path coverage cautiously without changing contracts.
+Текущий фокус: “CHK-008 decimals parse offset hardening completed (authoritatively verified).”
+Следующий шаг: “Optional: add a tiny regression test fixture specifically asserting offset-41 decoding behavior.”
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения

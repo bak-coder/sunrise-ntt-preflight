@@ -275,3 +275,5 @@ CHK-008 rpc mode enabled with Solana peer account decimals parsing from getAccou
 Minimal parse assumption used: tokenDecimals at offset 40 (8-byte discriminator + 32-byte peer address).
 Parse uncertainty/read issues map to degradation SKIPPED via adapter (PEER_ACCOUNT_DECIMALS_UNPARSEABLE) to avoid false PASS.
 Mock-mode CHK-008 path unchanged.
+
+Phase 5 / Iteration 5.1.1 hardening: authoritative NTT peer.rs confirms NttManagerPeer layout includes bump before address; token_decimals parse offset corrected from 40 to 41; fail-safe parse degradation preserved.
