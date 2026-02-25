@@ -9,6 +9,7 @@
 - [2026-02-25] Phase 2 / Iteration 2.2: добавлен read-only Solana RPC adapter и CHK-002 (RPC-backed deterministic health check); verify/report pipeline подтверждён smoke runs (success + degradation)
 - [2026-02-25] Phase 2 / Iteration 2.3: реализован CHK-003 (domain-level invariant для ntt.json.manager.solanaProgramId) через ConfigSourceAdapter; подтверждены success/fail smoke runs и report.json pipeline
 - [2026-02-25] Phase 2 / Iteration 2.4: реализован CHK-004 (domain-level peer/chain mapping presence invariant: `peers` non-empty) через ConfigSourceAdapter; подтверждены success/fail smoke runs и report.json pipeline
+- [2026-02-25] Phase 2 / Iteration 2.5: реализован CHK-005 (domain-level peer mapping entry value shape sanity для top-level `peers`) через ConfigSourceAdapter; подключён в ntt-generic/sunrise-executor; smoke PASS+FAIL и report.json подтверждены
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

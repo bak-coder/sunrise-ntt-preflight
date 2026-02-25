@@ -135,3 +135,19 @@ ntt-preflight CLI
   - peers empty -> FAIL (NTT_PEER_MAPPING_EMPTY)
   - peers non-empty -> PASS
 - Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.
+
+### Iteration 2.5: Domain-level peer mapping entry value shape sanity
+- Добавлен CHK-005 `ntt-peer-mapping-entry-value-shape` (blocking, deterministic).
+- Scope check (только top-level `peers`):
+  - значение каждой записи должно быть string
+  - после trim строка не пустая
+  - если строка начинается с `0x`, должна соответствовать `^0x[a-fA-F0-9]{40}$`
+- Semantics:
+  - source/read failure -> SKIPPED (CONFIG_NOT_FOUND / CONFIG_UNREADABLE, degradation=true)
+  - parse failure -> FAIL (CONFIG_PARSE_ERROR)
+  - peers missing -> FAIL (NTT_PEER_MAPPING_MISSING)
+  - peers non-object -> FAIL (NTT_PEER_MAPPING_SHAPE_INVALID)
+  - peers empty -> FAIL (NTT_PEER_MAPPING_EMPTY)
+  - invalid first entry value -> FAIL (NTT_PEER_MAPPING_ENTRY_VALUE_INVALID)
+  - all entries valid -> PASS
+- Check подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
