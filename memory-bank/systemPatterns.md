@@ -87,3 +87,16 @@ ntt-preflight CLI
 - Check engine scaffold: sequential lifecycle, deterministic-first ordering.
 - Registry профилей подключён: ntt-generic, sunrise-executor.
 - Degradation path в scaffold маппится в SKIPPED (не PASS).
+
+### Iteration 2.1: CHK-001 real deterministic path
+- Добавлен read-only adapter contract layer:
+  - ConfigSourceAdapter (рабочий, file-based)
+  - EvmReadAdapter (contract/stub, TODO на будущую интеграцию)
+- Реализован первый real deterministic check:
+  - CHK-001 Config Intent Source Readiness
+  - Проверяет ntt.json: present/readable/parseable
+  - severity_class: blocking
+- Degradation mapping:
+  - CONFIG_NOT_FOUND / CONFIG_UNREADABLE -> SKIPPED, degradation=true
+  - CONFIG_PARSE_ERROR -> FAIL
+- Check подключён в registry профилей ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.

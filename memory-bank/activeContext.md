@@ -2,20 +2,12 @@
 _Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Завершён coding-phase scaffold baseline: CLI, runtime contracts, lifecycle skeleton, registry/profiles, reporter/output contracts, tx-plan contracts.
+Phase 2 / Iteration 2.1 завершена: реализован один real deterministic check (CHK-001) через read-only adapter contracts.
 
 ## Следующий шаг
-Перейти к поэтапной реализации реальных checks/RPC adapters, сохраняя runtime semantics PASS/FAIL/SKIPPED и guard-инварианты.
-
-## Открытые вопросы
-- Нужна ли отдельная CI-метрика по доле SKIPPED checks (информативно, без блокировки)?
-- Когда фиксировать стабильную schema-версию report.json (v1)?
+Iteration 2.2: добавить следующий минимальный real check (или расширить CHK-001 до domain-level assertions), не меняя runtime semantics и guard-инварианты.
 
 ## Последние решения
-- Legacy WARN не блокирует scaffold; baseline в коде строго PASS/FAIL/SKIPPED.
-- non-blocking FAIL запрещён runtime guard'ом.
-- PASS при degradation=true запрещён runtime guard'ом.
-## Последние решения
-- Для scaffold baseline non-blocking FAIL запрещён.
-- Non-blocking проверки возвращают только PASS или SKIPPED.
-- SKIPPED всегда сопровождается reason_code/details и не считается PASS.
+- Source of truth по статусам сохранён: PASS/FAIL/SKIPPED only.
+- Legacy WARN в старых заметках не используется для runtime semantics.
+- EVM источник пока оставлен как adapter contract/stub с TODO, без сетевой интеграции.
