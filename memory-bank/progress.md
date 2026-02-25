@@ -15,6 +15,7 @@
 - [2026-02-25] Добавлена краткая README/CI usage заметка: execution-level required config precondition gate vs check-level statuses; зафиксировано поведение valid config vs missing required config после Iteration P1
 - [2026-02-25] Phase 3 / Iteration 3.1: реализован CHK-007 (mock-first peer-registration symmetry) с first-fail root-cause evidence; добавлены reusable mock fixtures (`registrations[]` с decimals для будущего CHK-008); smoke PASS+FAIL и report.json pipeline подтверждены
 - [2026-02-25] Phase 3 / Iteration 3.2: реализован CHK-008 (mock-first decimals-sync mismatch) с reuse registrations[] fixture schema; подключён в ntt-generic/sunrise-executor; smoke PASS + FAIL + integration (CHK-007+CHK-008 aggregate) подтверждены через report.json
+- [2026-02-25] Phase 3 / Iteration 3.3: реализован mock-aware `plan` bridge из check failures в actionable `tx-plan` шаги (CHK-007/CHK-008), подтверждены 4 smoke case (peer fail, decimals fail, both fail ordered, no-actions case)
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

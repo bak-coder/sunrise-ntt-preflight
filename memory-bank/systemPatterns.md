@@ -211,3 +211,12 @@ ntt-preflight CLI
   - directional decimals mismatch -> FAIL (NTT_DECIMALS_MISMATCH)
   - all checked pairs aligned -> PASS
 - CHK-008 подключён в `ntt-generic` и `sunrise-executor`; CHK-007 + CHK-008 агрегируются совместно в mock mode.
+
+### Phase 3 / Iteration 3.3: Mock-aware actionable plan generation
+- `plan` command в mock-mode теперь строит actionable steps из текущих check результатов (in-process, без tx execution).
+- Текущий mapping покрывает:
+  - CHK-007 FAIL -> шаг на восстановление peer-registration symmetry
+  - CHK-008 FAIL -> шаг на выравнивание directional decimals
+- Порядок шагов детерминирован и следует порядку checks (CHK-007 затем CHK-008).
+- При отсутствии actionable FAIL возвращается минимальный план: "No actions generated from current check failures."
+- Формат `tx-plan.md` / `tx-plan.json` сохранён (без schema расширения).
