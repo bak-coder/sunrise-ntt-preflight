@@ -3,8 +3,11 @@ import {
   ExecutorCapabilitiesReadResult,
   ExecutorEndpointReachabilityInput,
   ExecutorEndpointReachabilityResult,
+  ExecutorQuoteReadInput,
+  ExecutorQuoteReadResult,
   ExecutorHttpAdapter
 } from "./contracts";
+import { readFile } from "node:fs/promises";
 
 interface ExecutorHttpAdapterOptions {
   timeoutMs?: number;
@@ -324,6 +327,85 @@ export class ExecutorHttpReachabilityAdapter implements ExecutorHttpAdapter {
         request_id,
         http_status: real.http_status,
         payload_raw: real.payload_raw,
+        payload_json: null,
+        parseable_json: false
+      };
+    }
+  }
+
+  async getQuotePayload(input: ExecutorQuoteReadInput): Promise<ExecutorQuoteReadResult> {
+    const retrieved_at = new Date().toISOString();
+    const request_id = buildRequestId();
+    const quotePath = input.quote_path ?? "/v0/quote";
+    if (!input.endpoint) {
+      return {
+        ok: false,
+        mode: input.mock_mode ? "mock" : "real",
+        endpoint: null,
+        request_url: null,
+        retrieved_at,
+        request_id,
+        reason_code: "EXECUTOR_ENDPOINT_NOT_CONFIGURED",
+        details: "Executor endpoint is not configured.",
+        degradation: true
+      };
+    }
+
+    if (!input.mock_mode) {
+      return {
+        ok: false,
+        mode: "real",
+        endpoint: input.endpoint,
+        request_url: null,
+        retrieved_at,
+        request_id,
+        reason_code: "EXECUTOR_HTTP_READ_ERROR",
+        details:
+          "Real quote retrieval is not enabled in this iteration. Use --mock-chain with --executor-quote-path.",
+        degradation: true
+      };
+    }
+
+    let payload_raw: string;
+    try {
+      payload_raw = await readFile(quotePath, "utf8");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return {
+        ok: false,
+        mode: "mock",
+        endpoint: input.endpoint,
+        request_url: quotePath,
+        retrieved_at,
+        request_id,
+        reason_code: "EXECUTOR_HTTP_READ_ERROR",
+        details: `Failed to read mock quote payload from ${quotePath}: ${message}`,
+        degradation: true
+      };
+    }
+
+    try {
+      const parsed = JSON.parse(payload_raw) as unknown;
+      return {
+        ok: true,
+        mode: "mock",
+        endpoint: input.endpoint,
+        request_url: quotePath,
+        retrieved_at,
+        request_id,
+        payload_raw,
+        payload_json: parsed,
+        parseable_json: true
+      };
+    } catch {
+      return {
+        ok: true,
+        mode: "mock",
+        endpoint: input.endpoint,
+        request_url: quotePath,
+        retrieved_at,
+        request_id,
+        payload_raw,
         payload_json: null,
         parseable_json: false
       };

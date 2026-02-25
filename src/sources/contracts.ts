@@ -197,6 +197,38 @@ export type ExecutorCapabilitiesReadResult =
   | ExecutorCapabilitiesReadSuccess
   | ExecutorCapabilitiesReadFailure;
 
+export interface ExecutorQuoteReadInput {
+  endpoint?: string;
+  quote_path?: string;
+  mock_mode: boolean;
+}
+
+export interface ExecutorQuoteReadSuccess {
+  ok: true;
+  mode: "mock" | "real";
+  endpoint: string;
+  request_url: string;
+  retrieved_at: string;
+  request_id: string;
+  payload_raw: string;
+  payload_json: unknown | null;
+  parseable_json: boolean;
+}
+
+export interface ExecutorQuoteReadFailure {
+  ok: false;
+  mode: "mock" | "real";
+  endpoint: string | null;
+  request_url: string | null;
+  retrieved_at: string;
+  request_id: string;
+  reason_code: ExecutorHttpReadFailureReasonCode;
+  details: string;
+  degradation: true;
+}
+
+export type ExecutorQuoteReadResult = ExecutorQuoteReadSuccess | ExecutorQuoteReadFailure;
+
 export interface ExecutorHttpAdapter {
   getEndpointReachability(
     input: ExecutorEndpointReachabilityInput
@@ -204,6 +236,7 @@ export interface ExecutorHttpAdapter {
   getRelayCapabilities(
     input: ExecutorCapabilitiesReadInput
   ): Promise<ExecutorCapabilitiesReadResult>;
+  getQuotePayload(input: ExecutorQuoteReadInput): Promise<ExecutorQuoteReadResult>;
 }
 
 export interface AdapterRegistry {

@@ -10,6 +10,7 @@ import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthRea
 import { executorEndpointReachabilityCheck } from "../checks/real/executorEndpointReachability";
 import { executorRelayCapabilitiesCheck } from "../checks/real/executorRelayCapabilities";
 import { executorTransceiverConfigPresenceCheck } from "../checks/real/executorTransceiverConfigPresence";
+import { executorQuoteSanityCheck } from "../checks/real/executorQuoteSanity";
 
 export type ProfileName = "ntt-generic" | "sunrise-executor";
 
@@ -35,7 +36,8 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     decimalsSyncMockCheck,
     solanaRpcHealthReadinessCheck,
     executorEndpointReachabilityCheck,
-    executorRelayCapabilitiesCheck
+    executorRelayCapabilitiesCheck,
+    executorQuoteSanityCheck
   ]
 };
 

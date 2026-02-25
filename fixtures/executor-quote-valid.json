@@ -1,0 +1,6 @@
+{
+  "from_chain": "Solana",
+  "to_chain": "Base",
+  "amount_out": "1000000",
+  "route_hint": "ERN1"
+}

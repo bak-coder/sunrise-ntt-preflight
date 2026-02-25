@@ -9,6 +9,7 @@ export interface RuntimeOptions {
   executorUrl?: string;
   executorHealthPath?: string;
   executorCapabilitiesPath?: string;
+  executorQuotePath?: string;
   mockChain: boolean;
   mockChainPath: string;
   deep: boolean;
