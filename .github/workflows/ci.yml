@@ -1,4 +1,4 @@
-name: CI
+name: CI — deterministic demo smoke
 
 on:
   push:
