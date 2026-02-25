@@ -1,1 +1,6 @@
 .DS_Store
+
+# Local build outputs
+node_modules/
+dist/
+artifacts/
