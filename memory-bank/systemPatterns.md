@@ -125,6 +125,9 @@ ntt-preflight CLI
 - Добавлен CHK-004 `ntt-peer-chain-mapping-presence` (blocking, deterministic).
 - Check использует ConfigSourceAdapter и проверяет узкий intent invariant:
   - секция `peers` должна существовать и содержать >=1 запись.
+  - Текущий invariant path (fixture contract): top-level `peers`.
+- Ожидаемая форма `peers`: object (не array / не scalar).
+- Критерий non-empty: `Object.keys(peers).length >= 1`.
 - Semantics:
   - source/read failure -> SKIPPED (reason_code из config adapter, degradation=true)
   - parse error -> FAIL (CONFIG_PARSE_ERROR)

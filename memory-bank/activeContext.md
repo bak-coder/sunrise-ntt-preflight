@@ -10,6 +10,8 @@ Phase 2 / Iteration 2.4 завершена: добавлен domain-level determ
 ## Открытые вопросы
 - Нужна ли в следующем шаге поддержка альтернативного naming для peer mappings (`peerMappings`/`chains`) или оставляем строго `peers` до стабилизации schema?
 - Нужно ли нормализовать минимальный fixture contract для intent-level checks?
+- CHK-001 policy gap: blocking + SKIPPED при отсутствии обязательного config (`ntt.json`) может давать false green CI (SKIPPED не фейлит CI).
+- RPC error policy normalization: уточнить единые правила для timeout / transport / invalid response / node error-response (FAIL vs SKIPPED).
 
 ## Последние решения
 - CHK-001/002/003 semantics не изменялись.
