@@ -10,6 +10,7 @@ import { loadProfileChecks, ProfileName } from "./registry/profiles";
 import { createAdapters } from "./sources/createAdapters";
 import {
   buildVerifyReport,
+  buildLegacyVerifyReport,
   printVerifySummary,
   writeVerifyReport
 } from "./reporter/reporter";
@@ -130,7 +131,8 @@ async function runVerify(options: RuntimeOptions): Promise<void> {
   const checks = loadProfileChecks(options.profile);
   const results = await runCheckLifecycle({ options, adapters }, checks);
   const report = buildVerifyReport(options, results);
-  const reportPath = await writeVerifyReport(options.outputDir, report);
+  const legacyReport = buildLegacyVerifyReport(options, results);
+  const reportPath = await writeVerifyReport(options.outputDir, report, legacyReport);
   printVerifySummary(report);
   console.log(`[verify] report written to ${reportPath}`);
 }
