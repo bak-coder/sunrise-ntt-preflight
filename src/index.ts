@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+import { runCheckLifecycle } from "./checks/engine";
+import { RuntimeOptions } from "./checks/types";
+import { buildTxPlanSkeleton, writeTxPlanArtifacts } from "./plan/txPlan";
+import { loadProfileChecks, ProfileName } from "./registry/profiles";
+import { createAdapters } from "./sources/createAdapters";
+import {
+  buildVerifyReport,
+  printVerifySummary,
+  writeVerifyReport
+} from "./reporter/reporter";
+
+interface ParsedCli {
+  command: "verify" | "plan";
+  options: RuntimeOptions;
+}
+
+function printUsage(): void {
+  console.log("Usage:");
+  console.log(
+    "  ntt-preflight verify|plan --profile <ntt-generic|sunrise-executor> --rpc-url <url> [--config <path>] [--rpc-evm <url>] [--mock-chain] [--deep] [--output <dir>] [--fail-on <blocking|all|none>]"
+  );
+}
+
+function getFlagValue(args: string[], flag: string): string | undefined {
+  const idx = args.indexOf(flag);
+  if (idx === -1 || idx + 1 >= args.length) {
+    return undefined;
+  }
+  return args[idx + 1];
+}
+
+function hasFlag(args: string[], flag: string): boolean {
+  return args.includes(flag);
+}
+
+function parseProfile(value: string | undefined): ProfileName {
+  if (value === "ntt-generic" || value === "sunrise-executor") {
+    return value;
+  }
+  throw new Error("Invalid --profile. Expected ntt-generic or sunrise-executor.");
+}
+
+function parseFailOn(value: string | undefined): RuntimeOptions["failOn"] {
+  if (!value) {
+    return "blocking";
+  }
+  if (value === "blocking" || value === "all" || value === "none") {
+    return value;
+  }
+  throw new Error("Invalid --fail-on. Expected blocking, all, or none.");
+}
+
+function parseCli(argv: string[]): ParsedCli {
+  const [, , commandRaw, ...rest] = argv;
+  if (commandRaw !== "verify" && commandRaw !== "plan") {
+    throw new Error("Command must be verify or plan.");
+  }
+
+  const profile = parseProfile(getFlagValue(rest, "--profile"));
+  const rpcUrl = getFlagValue(rest, "--rpc-url");
+  if (!rpcUrl) {
+    throw new Error("--rpc-url is required.");
+  }
+
+  const options: RuntimeOptions = {
+    profile,
+    configPath: getFlagValue(rest, "--config") ?? "./ntt.json",
+    rpcUrl,
+    rpcEvm: getFlagValue(rest, "--rpc-evm"),
+    mockChain: hasFlag(rest, "--mock-chain"),
+    deep: hasFlag(rest, "--deep"),
+    outputDir: getFlagValue(rest, "--output") ?? "./artifacts",
+    failOn: parseFailOn(getFlagValue(rest, "--fail-on"))
+  };
+
+  return {
+    command: commandRaw,
+    options
+  };
+}
+
+async function runVerify(options: RuntimeOptions): Promise<void> {
+  const checks = loadProfileChecks(options.profile);
+  const adapters = createAdapters();
+  const results = await runCheckLifecycle({ options, adapters }, checks);
+  const report = buildVerifyReport(options, results);
+  const reportPath = await writeVerifyReport(options.outputDir, report);
+  printVerifySummary(report);
+  console.log(`[verify] report written to ${reportPath}`);
+}
+
+async function runPlan(options: RuntimeOptions): Promise<void> {
+  const plan = buildTxPlanSkeleton(options);
+  const paths = await writeTxPlanArtifacts(options.outputDir, plan);
+  console.log(`[plan] tx plan written to ${paths.markdownPath} and ${paths.jsonPath}`);
+}
+
+async function main(): Promise<void> {
+  try {
+    const parsed = parseCli(process.argv);
+    if (parsed.command === "verify") {
+      await runVerify(parsed.options);
+      return;
+    }
+    await runPlan(parsed.options);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`[error] ${message}`);
+    printUsage();
+    process.exitCode = 1;
+  }
+}
+
+void main();
