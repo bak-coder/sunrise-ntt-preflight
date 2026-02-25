@@ -110,3 +110,13 @@ ntt-preflight CLI
   - Транспорт/timeout/invalid response -> SKIPPED с degradation=true
 - Reason codes для degradation: RPC_UNAVAILABLE, RPC_TIMEOUT, RPC_READ_ERROR, RPC_RESPONSE_INVALID.
 - Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.
+
+### Iteration 2.3: First domain-level deterministic check
+- Добавлен CHK-003 `ntt-intent-manager-program-id-invariant` (blocking, deterministic).
+- Check использует ConfigSourceAdapter и проверяет доменный инвариант:
+  - `ntt.json.manager.solanaProgramId` должен существовать и соответствовать base58-like формату (32..44).
+- Semantics:
+  - source/read failure -> SKIPPED (reason_code из config adapter, degradation=true)
+  - parse/domain invariant violation -> FAIL
+  - invariant satisfied -> PASS
+- Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.

@@ -7,6 +7,7 @@
 - [2026-02-25] Реализован scaffold baseline: CLI verify/plan, runtime contracts и guards, lifecycle skeleton, profile registry, report.json и tx-plan contract artifacts; smoke run успешен
 - [2026-02-25] Phase 2 / Iteration 2.1: реализован CHK-001 (Config Intent Source Readiness) через ConfigSourceAdapter; добавлен adapter contract layer (config real + evm stub); verify pipeline и report.json подтверждены smoke run (success + degradation)
 - [2026-02-25] Phase 2 / Iteration 2.2: добавлен read-only Solana RPC adapter и CHK-002 (RPC-backed deterministic health check); verify/report pipeline подтверждён smoke runs (success + degradation)
+- [2026-02-25] Phase 2 / Iteration 2.3: реализован CHK-003 (domain-level invariant для ntt.json.manager.solanaProgramId) через ConfigSourceAdapter; подтверждены success/fail smoke runs и report.json pipeline
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата
