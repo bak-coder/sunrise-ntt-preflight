@@ -6,9 +6,9 @@
   "peers": {
     "ethereum": "0x1111111111111111111111111111111111111111"
   },
-  "gasLimit": 200000,
+  "gasLimit": 225000,
   "executor": {
     "transceiverAddress": "SunriseExec11111111111111111111111111111111",
-    "transceivers": ["OtherExec11111111111111111111111111111111111"]
+    "transceivers": ["SunriseExec11111111111111111111111111111111"]
   }
 }
