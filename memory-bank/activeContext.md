@@ -2,16 +2,16 @@
 _Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Phase 2 / Iteration 2.3 завершена: добавлен первый domain-level deterministic check по NTT intent (`manager.solanaProgramId`) через существующий adapter layer.
+Phase 2 / Iteration 2.4 завершена: добавлен domain-level deterministic check CHK-004 по presence peer/chain mapping в intent (`peers` non-empty).
 
 ## Следующий шаг
-Выбрать следующий минимальный domain-level invariant (например peer/chain mapping presence) без full schema-engine и без изменения runtime semantics/guards.
+Определить следующий узкий NTT intent invariant (без full schema-engine), сохраняя PASS/FAIL/SKIPPED semantics и существующие runtime guards.
 
 ## Открытые вопросы
-- Должен ли формат manager.solanaProgramId оставаться regex-level invariant или перейти на более строгую chain-aware валидацию позже?
-- Как постепенно расширять domain checks, не вводя full schema validator на ранней фазе?
+- Нужна ли в следующем шаге поддержка альтернативного naming для peer mappings (`peerMappings`/`chains`) или оставляем строго `peers` до стабилизации schema?
+- Нужно ли нормализовать минимальный fixture contract для intent-level checks?
 
 ## Последние решения
+- CHK-001/002/003 semantics не изменялись.
 - Runtime model остаётся PASS/FAIL/SKIPPED only.
-- CHK-001/CHK-002 semantics не менялись.
 - Legacy WARN не используется для runtime model.

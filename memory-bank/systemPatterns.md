@@ -120,3 +120,15 @@ ntt-preflight CLI
   - parse/domain invariant violation -> FAIL
   - invariant satisfied -> PASS
 - Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.
+
+### Iteration 2.4: Domain-level peer/chain mapping presence check
+- Добавлен CHK-004 `ntt-peer-chain-mapping-presence` (blocking, deterministic).
+- Check использует ConfigSourceAdapter и проверяет узкий intent invariant:
+  - секция `peers` должна существовать и содержать >=1 запись.
+- Semantics:
+  - source/read failure -> SKIPPED (reason_code из config adapter, degradation=true)
+  - parse error -> FAIL (CONFIG_PARSE_ERROR)
+  - peers missing -> FAIL (NTT_PEER_MAPPING_MISSING)
+  - peers empty -> FAIL (NTT_PEER_MAPPING_EMPTY)
+  - peers non-empty -> PASS
+- Check подключён в ntt-generic и sunrise-executor через существующий lifecycle/report pipeline.
