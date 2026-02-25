@@ -3,6 +3,7 @@ import { executorCapabilityStub } from "../checks/stubs/executorCapabilityStub";
 import { configIntentSourceReadinessCheck } from "../checks/real/configIntentSourceReadiness";
 import { nttIntentManagerProgramIdInvariantCheck } from "../checks/real/nttIntentManagerProgramIdInvariant";
 import { nttPeerChainMappingPresenceCheck } from "../checks/real/nttPeerChainMappingPresence";
+import { nttPeerMappingKeyShapeCheck } from "../checks/real/nttPeerMappingKeyShape";
 import { nttPeerMappingEntryValueShapeCheck } from "../checks/real/nttPeerMappingEntryValueShape";
 import { solanaRpcHealthReadinessCheck } from "../checks/real/solanaRpcHealthReadiness";
 
@@ -13,6 +14,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     configIntentSourceReadinessCheck,
     nttIntentManagerProgramIdInvariantCheck,
     nttPeerChainMappingPresenceCheck,
+    nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
     solanaRpcHealthReadinessCheck
   ],
@@ -20,6 +22,7 @@ const profileRegistry: Record<ProfileName, CheckDefinition[]> = {
     configIntentSourceReadinessCheck,
     nttIntentManagerProgramIdInvariantCheck,
     nttPeerChainMappingPresenceCheck,
+    nttPeerMappingKeyShapeCheck,
     nttPeerMappingEntryValueShapeCheck,
     solanaRpcHealthReadinessCheck,
     executorCapabilityStub

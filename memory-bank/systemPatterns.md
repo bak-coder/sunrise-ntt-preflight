@@ -151,3 +151,19 @@ ntt-preflight CLI
   - invalid first entry value -> FAIL (NTT_PEER_MAPPING_ENTRY_VALUE_INVALID)
   - all entries valid -> PASS
 - Check подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
+
+### Iteration 2.6: Domain-level peer mapping key shape sanity
+- Добавлен CHK-006 `ntt-peer-mapping-key-shape` (blocking, deterministic).
+- Scope check (только top-level `peers`):
+  - key.trim() не пустой
+  - key равен key.trim() (без leading/trailing spaces)
+  - key соответствует `^[a-z0-9][a-z0-9-_]*$`
+- Semantics:
+  - source/read failure -> SKIPPED (CONFIG_NOT_FOUND / CONFIG_UNREADABLE, degradation=true)
+  - parse failure -> FAIL (CONFIG_PARSE_ERROR)
+  - peers missing -> FAIL (NTT_PEER_MAPPING_MISSING)
+  - peers non-object -> FAIL (NTT_PEER_MAPPING_SHAPE_INVALID)
+  - peers empty -> FAIL (NTT_PEER_MAPPING_EMPTY)
+  - invalid first key -> FAIL (NTT_PEER_MAPPING_KEY_INVALID)
+  - all keys valid -> PASS
+- Check подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
