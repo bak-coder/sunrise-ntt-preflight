@@ -294,3 +294,5 @@ Phase 6 / Iteration 6.1.1: demo mock flow updated to explicitly surface CHK-012 
 Phase 6 / Iteration 6.2.1: added deterministic GitHub Actions CI workflow (push + pull_request) running npm ci + scripts/demo-mock-flow.sh with no secrets/network dependencies.
 
 Phase 6 / Iteration 6.3.1: README made submission-ready with strict section order, real deterministic demo snippet, and CHK-001..013 matrix; no runtime/check/plan semantics changes.
+
+Phase 6 / Iteration 6.4: Added FAIL-driven tx-plan mapping for CHK-013 compute-budget-sanity using observed configuredGasLimit/requiredMinimum; PASS/SKIPPED remain non-actionable.

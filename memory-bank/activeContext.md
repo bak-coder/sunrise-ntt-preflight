@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: submission-ready README finalized (concise demo-first narrative).
-Следующий шаг: optional final packaging/release checklist pass.
+Текущий фокус: CHK-013 plan remediation mapping integrated and demo pipeline aligned.
+Следующий шаг: optional final release checklist / artifact polish.
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения
