@@ -177,3 +177,9 @@ ntt-preflight CLI
   - runtime status model не меняется (PASS/FAIL/SKIPPED)
   - runtime guards/contracts не меняются
   - check-level semantics CHK-001 не меняются (degradation mapping сохраняется)
+
+  ### Docs clarification after Iteration P1
+- Добавлена короткая README заметка о разделении:
+  - execution-level precondition gates
+  - check-level statuses (PASS/FAIL/SKIPPED)
+- Явно задокументировано, что missing required config фейлит verify до aggregation (non-zero exit), при этом CHK-001 сохраняет check-level SKIPPED semantics.

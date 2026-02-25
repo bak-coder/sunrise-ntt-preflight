@@ -2,16 +2,13 @@
 _Обновлено: 2026-02-25_
 
 ## Текущий фокус
-Phase 2 / Iteration P1 завершена: устранён false-green CI gap через execution-level required config precondition gate для verify.
+Документирование behavior после Iteration P1: добавлена README заметка про execution-level precondition gate vs check-level statuses.
 
 ## Следующий шаг
-Продолжить узкие domain-level invariants, сохраняя PASS/FAIL/SKIPPED semantics и runtime guards без расширения schema/policy.
+Вернуться к следующему узкому implementation-step без изменения runtime semantics/guards.
 
 ## Открытые вопросы
-- Нужно ли аналогично формализовать precondition-gates для других критичных обязательных входов (без изменения check semantics)?
-- Как документировать policy-layer vs check-layer поведение в README/CI usage note?
+- Нужно ли дублировать этот note в отдельной CI/GitHub Action секции docs?
 
 ## Последние решения
-- Для `ntt-generic` и `sunrise-executor` отсутствие/нечитаемость required config теперь фейлит execution до aggregation.
-- CHK-001 semantics не менялись.
-- Legacy WARN не влияет на runtime model.
+- Документация закрепляет: missing required config -> non-zero exit до aggregation; CHK-001 semantics не меняются.

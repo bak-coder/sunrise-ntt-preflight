@@ -38,6 +38,32 @@ ASSUMPTIONS.md                    — Design decisions: determinism, SKIPPED vs 
 
 ---
 
+## Verify/CI behavior note (Iteration P1)
+
+`ntt-preflight verify` has two layers of behavior for config-required profiles (`ntt-generic`, `sunrise-executor`):
+
+1. **Execution-level precondition gate**  
+   Required config (`--config`) must be readable before normal check aggregation starts.
+2. **Check-level statuses**  
+   Checks still report only `PASS / FAIL / SKIPPED` (no `WARN`).
+
+Why this exists: to prevent false-green CI when required config is missing, while preserving existing check semantics.
+
+- Missing/unreadable required config now fails execution with non-zero exit **before** aggregation.
+- `CHK-001` semantics do **not** change: `CONFIG_NOT_FOUND` / `CONFIG_UNREADABLE` remain `SKIPPED` at check layer.
+
+Example:
+
+```bash
+# Valid config -> verify runs checks and writes report.json
+ntt-preflight verify --profile ntt-generic --config ./fixtures/sample-ntt.json --rpc-url "$SOLANA_RPC"
+
+# Missing required config -> precondition gate fails fast (non-zero exit), no false-green CI
+ntt-preflight verify --profile ntt-generic --config ./fixtures/missing-required-config.json --rpc-url "$SOLANA_RPC"
+```
+
+---
+
 ## Критические факты (не перепутай)
 
 ### /v0/capabilities — chain-keyed, НЕ массив
