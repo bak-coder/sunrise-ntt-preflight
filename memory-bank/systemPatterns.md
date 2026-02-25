@@ -277,3 +277,7 @@ Parse uncertainty/read issues map to degradation SKIPPED via adapter (PEER_ACCOU
 Mock-mode CHK-008 path unchanged.
 
 Phase 5 / Iteration 5.1.1 hardening: authoritative NTT peer.rs confirms NttManagerPeer layout includes bump before address; token_decimals parse offset corrected from 40 to 41; fail-safe parse degradation preserved.
+
+Phase 5 / Iteration 5.2.1: Added CHK-012 executor-quote-sanity (mock-first).
+Policy: retrieval degradation -> SKIPPED; parse/shape invalid payload -> FAIL; minimal valid payload -> PASS.
+Scope intentionally shallow: top-level from_chain/to_chain/amount_out string checks only; no real quote HTTP integration in this iteration.

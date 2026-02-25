@@ -27,6 +27,7 @@
 [2026-02-25] Phase 4 / Iteration 4.5: extended scripts/demo-mock-flow.sh to include executor-layer failures (CHK-010/011) and corresponding plan actions from existing mappings; validated deterministic broken->plan->fixed narrative with predictable artifacts and fail-fast checks.
 [2026-02-25] Phase 5 / Iteration 5.1: implemented real-path Solana decimals parsing for CHK-008 rpc mode (minimal tokenDecimals extraction), added degradation-safe parse failure reason, preserved mock behavior/evidence schema/runtime contracts, and validated rpc mismatch detection with deterministic smoke.
 [2026-02-25] Phase 5 / Iteration 5.1.1: validated CHK-008 Solana peer account decimals layout against authoritative upstream source; corrected parsing offset to 41; preserved runtime contracts and degradation behavior.
+[2026-02-25] Phase 5 / Iteration 5.2.1: implemented CHK-012 executor-quote-sanity (mock-first), added PASS/FAIL fixtures, wired after CHK-010 in sunrise-executor, validated PASS/FAIL/SKIPPED smoke paths with existing verify/report pipeline.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

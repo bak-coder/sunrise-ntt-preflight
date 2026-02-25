@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: “CHK-008 decimals parse offset hardening completed (authoritatively verified).”
-Следующий шаг: “Optional: add a tiny regression test fixture specifically asserting offset-41 decoding behavior.”
+Текущий фокус: CHK-012 mock-first quote sanity slice integrated in sunrise-executor profile after CHK-010.
+Следующий шаг: optional next iteration for plan mapping of CHK-012 failures (without changing CHK-012 semantics).
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения
