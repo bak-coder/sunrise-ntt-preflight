@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CHK-012 plan mapping integrated (FAIL-only) with existing tx-plan pipeline.
-Следующий шаг: optional demo flow update to surface CHK-012 remediation step in narrative.
+Текущий фокус: CHK-013 static compute-budget sanity integrated into sunrise-executor verify flow.
+Следующий шаг: optional FAIL-driven plan mapping for CHK-013 (separate iteration).
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения

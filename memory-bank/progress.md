@@ -30,6 +30,7 @@
 [2026-02-25] Phase 5 / Iteration 5.2.1: implemented CHK-012 executor-quote-sanity (mock-first), added PASS/FAIL fixtures, wired after CHK-010 in sunrise-executor, validated PASS/FAIL/SKIPPED smoke paths with existing verify/report pipeline.
 [2026-02-25] Phase 5 / Iteration 5.2.2: implemented real dry-run quote retrieval routing for CHK-012; validated mock PASS + real PASS/FAIL/SKIPPED through verify/report pipeline without runtime contract changes.
 [2026-02-25] Phase 5 / Iteration 5.2.3: implemented CHK-012 FAIL-driven plan mapping in tx-plan; validated FAIL generates action, PASS/SKIPPED do not; existing executor/domain mappings remain stable.
+[2026-02-25] Phase 5 / Iteration 5.3.1: implemented CHK-013 compute-budget-sanity (static-only), added pass/fail fixtures, wired into sunrise-executor, and validated PASS/FAIL/SKIPPED smoke with required evidence fields.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата
