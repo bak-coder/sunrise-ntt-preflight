@@ -195,3 +195,19 @@ ntt-preflight CLI
   - `registrations[]` с direction records `{from,to,registered,peerAddress?,decimals?}`
   - поле `decimals` оставлено для будущего CHK-008 (decimals mismatch).
 - CHK-007 подключён в `ntt-generic` и `sunrise-executor`; порядок сохраняет config/domain checks перед RPC.
+
+### Phase 3 / Iteration 3.2: CHK-008 mock-first decimals-sync mismatch
+- Добавлен CHK-008 `decimals-sync-mock` (blocking, deterministic, mock-chain only).
+- Reuse текущей fixture schema из CHK-007:
+  - `registrations[]` records `{from,to,registered,peerAddress?,decimals?}`.
+- Assertion:
+  - для каждого ожидаемого pair (`solana<->peer` из top-level `peers`) directional registrations должны иметь одинаковые decimals.
+- Semantics:
+  - source/read failure -> SKIPPED (CONFIG_NOT_FOUND / CONFIG_UNREADABLE, degradation=true)
+  - mock disabled -> SKIPPED (MOCK_CHAIN_DISABLED)
+  - config/mock parse errors -> FAIL (CONFIG_PARSE_ERROR / MOCK_CHAIN_PARSE_ERROR)
+  - invalid fixture shape -> FAIL (MOCK_CHAIN_FIXTURE_SHAPE_INVALID)
+  - missing directional registration or decimals metadata -> FAIL (NTT_DECIMALS_REGISTRATION_MISSING)
+  - directional decimals mismatch -> FAIL (NTT_DECIMALS_MISMATCH)
+  - all checked pairs aligned -> PASS
+- CHK-008 подключён в `ntt-generic` и `sunrise-executor`; CHK-007 + CHK-008 агрегируются совместно в mock mode.
