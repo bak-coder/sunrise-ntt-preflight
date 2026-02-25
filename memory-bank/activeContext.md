@@ -17,3 +17,22 @@ Bootstrap Gate пройден — все 4 ключевых файла запо�
 - `compute-budget-sanity [static]` — в Core, `--deep` simulation — в Stretch
 - Dual demo mode: devnet primary + `--mock-chain` fallback
 - `fail-on: blocking` — warnings не блокируют PR в GitHub Action
+
+# Active Context
+
+## Обновлено
+2026-02-25
+
+## Текущий фокус
+Финализация runtime semantics для scaffold baseline перед coding-фазой: PASS/FAIL/SKIPPED, без WARN, с запретом non-blocking FAIL.
+
+## Следующий шаг
+Запустить coding-фазу scaffold CLI с зафиксированным контрактом статусов и CI aggregation по (severity_class, status), без допуска false PASS.
+
+## Открытые вопросы
+- Нужен ли отдельный quality-metric по количеству SKIPPED в CI summary (информативно, без блокировки)?
+
+## Последние решения
+- Для scaffold baseline non-blocking FAIL запрещён.
+- Non-blocking проверки возвращают только PASS или SKIPPED.
+- SKIPPED всегда сопровождается reason_code/details и не считается PASS.

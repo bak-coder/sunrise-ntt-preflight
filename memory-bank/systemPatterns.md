@@ -62,3 +62,17 @@ ntt-preflight CLI
 - Simulation не входит в core flow — только за `--deep` флагом (stretch)
 - Параллельный запуск checks не планируется — sequential, предсказуемый вывод
 - Инструмент не синхронизирует состояние (не `ntt pull`) — только assertion
+
+## Runtime status semantics (scaffold baseline)
+
+- Базовая модель статусов: PASS / FAIL / SKIPPED (WARN не используется).
+- FAIL допустим только для checks с severity_class=blocking.
+- Для severity_class=non-blocking допустимы только PASS или SKIPPED.
+- Комбинация non-blocking + FAIL считается нарушением runtime contract.
+- SKIPPED не трактуется как PASS и всегда требует reason_code/details.
+- CI aggregation опирается на пару (severity_class, status):
+  - fail-on: blocking -> есть blocking FAIL
+  - fail-on: all -> есть любой FAIL (эквивалентно blocking в scaffold baseline, пока non-blocking FAIL запрещён)
+  - fail-on: none -> не фейлим по статусам checks
+- Инвариант: при неполных/недостоверных данных PASS запрещён.
+- Инвариант: при деградации внешней зависимости не допускается false PASS.

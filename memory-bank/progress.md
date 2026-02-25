@@ -24,3 +24,5 @@
 
 ## Блокеры
 - Нет. Проект готов к старту разработки.
+
+- [2026-02-25] Уточнены runtime semantics scaffold baseline: PASS/FAIL/SKIPPED; WARN исключён; non-blocking FAIL запрещён; CI aggregation определён через (severity_class, status)
