@@ -32,6 +32,7 @@
 [2026-02-25] Phase 5 / Iteration 5.2.3: implemented CHK-012 FAIL-driven plan mapping in tx-plan; validated FAIL generates action, PASS/SKIPPED do not; existing executor/domain mappings remain stable.
 [2026-02-25] Phase 5 / Iteration 5.3.1: implemented CHK-013 compute-budget-sanity (static-only), added pass/fail fixtures, wired into sunrise-executor, and validated PASS/FAIL/SKIPPED smoke with required evidence fields.
 [2026-02-25] Phase 6 / Iteration 6.2.1: added .github/workflows/ci.yml for deterministic checks + demo smoke (npm ci + demo-mock-flow), validated local run; no runtime/check logic changes.
+[2026-02-25] Phase 6 / Iteration 6.3.1: updated root README to concise submission-ready format with one-liner, deterministic 30-second demo command, real output snippet, and full CHK-001..013 matrix; only README changed.
 
 ## В работе
 - Декомпозиция скоупа на задачи для субагентов — не начата

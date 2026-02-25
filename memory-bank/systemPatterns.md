@@ -292,3 +292,5 @@ Semantics: FAIL only when parseable gasLimit is below threshold; source/field un
 Phase 6 / Iteration 6.1.1: demo mock flow updated to explicitly surface CHK-012 FAIL -> plan remediation step and CHK-013 FAIL as verify-only signal; fixed state now asserts CHK-012/013 PASS without changing check/plan semantics.
 
 Phase 6 / Iteration 6.2.1: added deterministic GitHub Actions CI workflow (push + pull_request) running npm ci + scripts/demo-mock-flow.sh with no secrets/network dependencies.
+
+Phase 6 / Iteration 6.3.1: README made submission-ready with strict section order, real deterministic demo snippet, and CHK-001..013 matrix; no runtime/check/plan semantics changes.

@@ -1,8 +1,8 @@
 # Active Context
 _Обновлено: 2026-02-25_
 
-Текущий фокус: CI workflow added for deterministic demo smoke on push/pull_request.
-Следующий шаг: optional cleanup/commit pass to make working tree clean.
+Текущий фокус: submission-ready README finalized (concise demo-first narrative).
+Следующий шаг: optional final packaging/release checklist pass.
 Открытые вопросы: confirm decimals offset with canonical program layout source for production hardening.
 
 ## Последние решения
