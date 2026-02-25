@@ -23,6 +23,17 @@ function readObservedPair(result: CheckResult): string {
   return typeof pair === "string" ? pair : "unknown-pair";
 }
 
+function readObservedValue(result: CheckResult, key: string, fallback = "unknown"): string {
+  const data = result.evidence.data ?? {};
+  const observed = (data.observed as Record<string, unknown> | undefined) ?? {};
+  const value = observed[key];
+  return typeof value === "string" && value.length > 0 ? value : fallback;
+}
+
+function readEvidenceSummary(result: CheckResult): string {
+  return result.evidence.summary ?? "No evidence summary provided.";
+}
+
 function buildActionStepsFromResults(results: CheckResult[]): TxPlan["steps"];
 function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPlan["steps"] {
   const list = Array.isArray(results) ? results : [results];
@@ -37,7 +48,8 @@ function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPl
         id: `fix-${result.check_id}`,
         description:
           `Fix peer-registration symmetry for ${pair}. Ensure both directional peer registrations exist before re-verify. ` +
-          `Observed root cause: ${rootCause}`,
+          `Observed root cause: ${rootCause}. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
         requires_signature: true
       });
     }
@@ -49,8 +61,46 @@ function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPl
         id: `fix-${result.check_id}`,
         description:
           `Align registration decimals for ${pair}. Update directional registrations to a consistent decimals value, then re-verify. ` +
-          `Observed root cause: ${rootCause}`,
+          `Observed root cause: ${rootCause}. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
         requires_signature: true
+      });
+    }
+
+    if (result.check_id === "CHK-009-executor-endpoint-reachability") {
+      const endpoint = readObservedValue(result, "endpoint");
+      const requestUrl = readObservedValue(result, "request_url");
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Restore executor endpoint reachability for endpoint=${endpoint} (request_url=${requestUrl}). ` +
+          `Verify base URL/health path, network egress, and endpoint HTTP availability, then re-verify. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
+        requires_signature: false
+      });
+    }
+
+    if (result.check_id === "CHK-010-executor-relay-capabilities") {
+      const requestUrl = readObservedValue(result, "request_url");
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Fix executor capabilities payload at ${requestUrl}. Ensure /v0/capabilities is reachable and returns minimal required fields ` +
+          `(supported_chains:string[], supported_relay_types:string[], status:string), then re-verify. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
+        requires_signature: false
+      });
+    }
+
+    if (result.check_id === "CHK-011-executor-transceiver-config-presence") {
+      const requiredRef = readObservedValue(result, "required_reference");
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Fix executor transceiver config presence in ntt.json. Ensure executor.transceiverAddress/transceiverReference is set ` +
+          `and included in executor.transceivers (required_reference=${requiredRef}), then re-verify. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
+        requires_signature: false
       });
     }
   }
@@ -68,7 +118,7 @@ export function buildTxPlanFromCheckResults(
     profile: options.profile,
     assumptions: [
       "Plan is generated from check failures only (no transaction execution).",
-      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007 and CHK-008.",
+      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007/008 and executor checks CHK-009/010/011.",
       "Preflight mode is read-only and does not sign or execute transactions."
     ],
     steps
