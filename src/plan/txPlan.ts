@@ -103,6 +103,18 @@ function buildActionStepsFromResults(results: CheckResult | CheckResult[]): TxPl
         requires_signature: false
       });
     }
+
+    if (result.check_id === "CHK-012-executor-quote-sanity") {
+      const requestUrl = readObservedValue(result, "request_url");
+      steps.push({
+        id: `fix-${result.check_id}`,
+        description:
+          `Fix executor quote payload at ${requestUrl}. Ensure quote response is valid JSON and matches minimal sanity fields ` +
+          `(from_chain:string, to_chain:string, amount_out:string), then re-verify. ` +
+          `reason_code=${result.reason_code ?? "none"}. evidence_summary=${readEvidenceSummary(result)}`,
+        requires_signature: false
+      });
+    }
   }
 
   return steps;
@@ -118,7 +130,7 @@ export function buildTxPlanFromCheckResults(
     profile: options.profile,
     assumptions: [
       "Plan is generated from check failures only (no transaction execution).",
-      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007/008 and executor checks CHK-009/010/011.",
+      "Mock-aware iteration: actionable mapping is currently implemented for CHK-007/008 and executor checks CHK-009/010/011/012.",
       "Preflight mode is read-only and does not sign or execute transactions."
     ],
     steps
