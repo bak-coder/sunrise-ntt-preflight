@@ -48,7 +48,8 @@ export type SolanaRpcReadFailureReasonCode =
   | "RPC_UNAVAILABLE"
   | "RPC_TIMEOUT"
   | "RPC_READ_ERROR"
-  | "RPC_RESPONSE_INVALID";
+  | "RPC_RESPONSE_INVALID"
+  | "PEER_PDA_DERIVATION_FAILED";
 
 export interface SolanaHealthSuccess {
   ok: true;
@@ -75,8 +76,43 @@ export interface SolanaHealthFailure {
 
 export type SolanaHealthReadResult = SolanaHealthSuccess | SolanaHealthFailure;
 
+export interface SolanaPeerAccountExistenceInput {
+  manager_program_id: string;
+  chain_id: number;
+}
+
+export interface SolanaPeerAccountExistenceSuccess {
+  ok: true;
+  endpoint: string;
+  retrieved_at: string;
+  request_id: string;
+  manager_program_id: string;
+  chain_id: number;
+  pda: string;
+  exists: boolean;
+}
+
+export interface SolanaPeerAccountExistenceFailure {
+  ok: false;
+  endpoint: string;
+  retrieved_at: string;
+  request_id: string;
+  manager_program_id: string;
+  chain_id: number;
+  reason_code: SolanaRpcReadFailureReasonCode;
+  details: string;
+  degradation: true;
+}
+
+export type SolanaPeerAccountExistenceResult =
+  | SolanaPeerAccountExistenceSuccess
+  | SolanaPeerAccountExistenceFailure;
+
 export interface SolanaReadAdapter {
   getHealth(): Promise<SolanaHealthReadResult>;
+  getPeerAccountExistence(
+    input: SolanaPeerAccountExistenceInput
+  ): Promise<SolanaPeerAccountExistenceResult>;
 }
 
 export interface AdapterRegistry {
