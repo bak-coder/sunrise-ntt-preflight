@@ -15,6 +15,8 @@ interface ParsedCli {
   options: RuntimeOptions;
 }
 
+const profilesRequiringConfig = new Set<ProfileName>(["ntt-generic", "sunrise-executor"]);
+
 function printUsage(): void {
   console.log("Usage:");
   console.log(
@@ -81,8 +83,17 @@ function parseCli(argv: string[]): ParsedCli {
 }
 
 async function runVerify(options: RuntimeOptions): Promise<void> {
-  const checks = loadProfileChecks(options.profile);
   const adapters = createAdapters({ rpcUrl: options.rpcUrl });
+  if (profilesRequiringConfig.has(options.profile)) {
+    const configRead = await adapters.configSource.readConfig(options.configPath);
+    if (!configRead.ok) {
+      throw new Error(
+        `Required config precondition failed for profile ${options.profile}: ${configRead.reason_code} (${options.configPath}) - ${configRead.details}`
+      );
+    }
+  }
+
+  const checks = loadProfileChecks(options.profile);
   const results = await runCheckLifecycle({ options, adapters }, checks);
   const report = buildVerifyReport(options, results);
   const reportPath = await writeVerifyReport(options.outputDir, report);
