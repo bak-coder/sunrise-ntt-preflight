@@ -14,9 +14,9 @@ Real output snippet:
 ```text
 STEP 3/4: Verify fixed mock fixture (expect READY-style green incl. CHK-012/013)
 STEP 4/4: Demo summary
-- Broken report: /Users/bogdan/Desktop/sunrise-ntt-preflight/artifacts/demo-mock-flow/1-broken-verify/report.json
-- Plan artifact: /Users/bogdan/Desktop/sunrise-ntt-preflight/artifacts/demo-mock-flow/2-plan/tx-plan.md
-- Fixed report: /Users/bogdan/Desktop/sunrise-ntt-preflight/artifacts/demo-mock-flow/3-fixed-verify/report.json
+- Broken report: ./artifacts/demo-mock-flow/1-broken-verify/report.json
+- Plan artifact: ./artifacts/demo-mock-flow/2-plan/tx-plan.md
+- Fixed report: ./artifacts/demo-mock-flow/3-fixed-verify/report.json
 READY: mock narrative succeeded (broken -> plan -> fixed).
 ```
 
