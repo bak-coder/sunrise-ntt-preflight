@@ -53,6 +53,20 @@ READY: mock narrative succeeded (broken -> plan -> fixed).
 - `plan` is FAIL-driven remediation text (key mappings include executor checks, incl. CHK-012).
 - Profiles: `ntt-generic` and `sunrise-executor`.
 
+## Architecture
+```mermaid
+flowchart LR
+  A[ntt.json] --> B[Profile route]
+  B --> C[Check engine]
+  D[Mock fixtures] --> C
+  E[Solana RPC] --> C
+  C --> F[report.json V2]
+  C --> G[tx-plan.md]
+  F --> H[GitHub Actions]
+  G --> H
+  H --> I[Pass/Fail]
+```
+
 ## CI
 GitHub Actions runs on `push` and `pull_request`.
 Workflow executes `npm ci` + `bash scripts/demo-mock-flow.sh`.
